@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+/*
+ * YurrMom brand system — confident, funny, human, scannable under stress.
+ * Deliberately NOT a pastel parenting template and NOT an enterprise dashboard
+ * (docs/03 visual direction).
+ */
+@theme {
+  --color-cream: #faf3e7;
+  --color-paper: #fffcf5;
+  --color-ink: #221a14;
+  --color-ink-soft: #52453b;
+  --color-tomato: #dd4a24;
+  --color-tomato-deep: #b53a1a;
+  --color-mustard: #e9a63a;
+  --color-mustard-soft: #f7e3bd;
+  --color-sage: #3d7a61;
+  --color-sage-deep: #2c5c48;
+  --color-sage-soft: #dcebe2;
+
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-body-stack), ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+}
+
+h1,
+h2,
+h3,
+.font-display {
+  font-family: var(--font-display);
+}
+
+::selection {
+  background: var(--color-mustard);
+  color: var(--color-ink);
+}
+
+/* Checkbox check styling for the portable-list checkoff */
+.ym-check:checked + span {
+  text-decoration: line-through;
+  opacity: 0.45;
+}
+
+/* Print behavior for portable lists — the honest export that always works */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
+  .print-plain {
+    box-shadow: none !important;
+    border-color: #ddd !important;
+  }
+}
