@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {
   retrieve,
@@ -19,6 +19,9 @@ import {
   type AnswerPoint,
   type AnswerRequest,
   type CommunicationDepth,
+  type RendererPreview,
+  type RenderedAnswer,
+  type ValidationResult,
 } from "@/domain/answer";
 import { localeLabel, localeNames } from "@/domain/i18n";
 import { knowledgeCorpus, knowledgeTranslations } from "@/data/knowledge-corpus";
@@ -541,6 +544,7 @@ function PlanInspector({
       </div>
 
       {plan && <PlanView plan={plan} />}
+      {plan && plan.validation.valid && <LiveRenderer request={request} />}
     </section>
   );
 }
@@ -674,6 +678,182 @@ function PointRow({ pt }: { pt: AnswerPoint }) {
         {pt.applicability ? ` · ${pt.applicability}` : ""}
       </p>
       {pt.limitations.length > 0 && <p className="mt-0.5 text-[11px] text-ink-soft">Limitations: {pt.limitations.join(" · ")}</p>}
+    </div>
+  );
+}
+
+// ───────────────────────── Live constrained renderer (Phase 7) ──────────────
+
+const RC = copy.renderer;
+
+interface RenderStatus {
+  enabled: boolean;
+  localOnly: boolean;
+  provider: string;
+  model: string;
+  credentialsPresent: boolean;
+  reason?: string;
+}
+
+type RenderResponse =
+  | { status: "rendered"; provider: string; model: string; planFingerprint: string; disposition: string; rendered: RenderedAnswer; diagnostics: Record<string, unknown> }
+  | { status: "fallback"; provider: string; model: string; planFingerprint: string; disposition: string; reason: string; rejectionCodes: string[]; preview: RendererPreview; diagnostics: Record<string, unknown> }
+  | { status: "plan-invalid"; reason: string; planValidation: ValidationResult }
+  | { status: "error"; code: string; message: string };
+
+/**
+ * The live constrained renderer surface — analytical, NOT a chatbot. It makes
+ * the trusted pipeline visible: valid plan → provider → candidate validation →
+ * deterministic compilation → final validation. All secrets stay server-side;
+ * the browser only POSTs an AnswerRequest and displays a safe result.
+ */
+function LiveRenderer({ request }: { request: AnswerRequest }) {
+  const [status, setStatus] = useState<RenderStatus | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [result, setResult] = useState<RenderResponse | null>(null);
+  const [loadedStatus, setLoadedStatus] = useState(false);
+
+  useEffect(() => {
+    let alive = true;
+    fetch("/api/studio/render-answer", { method: "GET" })
+      .then((r) => r.json())
+      .then((s: RenderStatus) => { if (alive) { setStatus(s); setLoadedStatus(true); } })
+      .catch(() => { if (alive) setLoadedStatus(true); });
+    return () => { alive = false; };
+  }, []);
+
+  async function run() {
+    if (busy) return; // one action = one request
+    setBusy(true);
+    setResult(null);
+    try {
+      const res = await fetch("/api/studio/render-answer", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(request),
+      });
+      setResult((await res.json()) as RenderResponse);
+    } catch {
+      setResult({ status: "error", code: "network", message: "Request failed." });
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <section aria-label="Live constrained renderer" className="mt-6 space-y-4 rounded-2xl border-2 border-ink/15 bg-paper p-5">
+      <div>
+        <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-sage">{RC.heading}</p>
+        <p className="mt-1 rounded-lg bg-mustard-soft/60 p-2 text-xs font-semibold text-ink">{RC.localOnly}</p>
+        <p className="mt-2 max-w-2xl text-sm text-ink-soft">{RC.intro}</p>
+      </div>
+
+      {/* Feature status */}
+      <div className="rounded-xl border border-ink/15 bg-cream/60 p-3 text-sm">
+        {!loadedStatus && <p className="text-ink-soft">Checking renderer status…</p>}
+        {loadedStatus && status && (
+          <>
+            <p className={`font-bold ${status.enabled ? "text-sage-deep" : "text-ink-soft"}`}>
+              {status.enabled ? RC.statusEnabled : RC.statusDisabled}
+            </p>
+            <p className="mt-1 text-xs text-ink-soft">
+              {RC.providerLabel}: <span className="font-mono">{status.provider}</span> · {RC.modelLabel}:{" "}
+              <span className="font-mono">{status.model || "—"}</span>
+              {status.reason ? ` · ${status.reason}` : ""}
+            </p>
+          </>
+        )}
+      </div>
+
+      {/* Pipeline visualization */}
+      <p className="text-[11px] font-semibold text-ink-soft">{RC.pipeline}</p>
+
+      <button
+        type="button"
+        onClick={run}
+        disabled={busy}
+        className="rounded-full border-2 border-ink bg-sage px-5 py-2 text-sm font-extrabold text-cream transition-colors hover:bg-sage-deep disabled:cursor-not-allowed disabled:opacity-40"
+      >
+        {busy ? RC.rendering : RC.render}
+      </button>
+
+      {result && <RenderResultView result={result} />}
+      <p className="text-[11px] italic text-ink-soft">{RC.note}</p>
+    </section>
+  );
+}
+
+function RenderResultView({ result }: { result: RenderResponse }) {
+  if (result.status === "error") {
+    return <div className="rounded-xl border border-tomato/60 bg-cream p-3 text-sm text-tomato-deep">Error: {result.code} — {result.message}</div>;
+  }
+  if (result.status === "plan-invalid") {
+    return <div className="rounded-xl border border-tomato/60 bg-cream p-3 text-sm text-tomato-deep">Plan invalid — {result.reason}</div>;
+  }
+
+  const isRendered = result.status === "rendered";
+  return (
+    <div className="space-y-3">
+      <div className={`rounded-xl border-2 p-3 ${isRendered ? "border-sage bg-sage-soft text-sage-deep" : "border-mustard bg-mustard-soft text-ink"}`}>
+        <p className="text-xs font-extrabold uppercase tracking-wide">
+          {isRendered ? RC.resultRendered : RC.resultFallback}
+        </p>
+        {!isRendered && result.status === "fallback" && <p className="mt-1 text-sm">{result.reason}</p>}
+      </div>
+
+      {result.status === "fallback" && result.rejectionCodes.length > 0 && (
+        <div className="rounded-xl border border-ink/15 bg-cream p-3">
+          <p className="text-xs font-bold text-tomato-deep">{RC.rejectionReasons}</p>
+          <ul className="mt-1 list-disc space-y-0.5 pl-5 text-xs text-ink-soft">
+            {result.rejectionCodes.map((c) => <li key={c} className="font-mono">{c}</li>)}
+          </ul>
+        </div>
+      )}
+
+      {result.status === "rendered" && <RenderedAnswerView answer={result.rendered} />}
+
+      {result.status === "fallback" && (
+        <div className="rounded-xl border border-ink/15 bg-paper p-3">
+          <p className="text-xs font-bold uppercase tracking-wide text-ink-soft">Deterministic preview</p>
+          <pre className="mt-2 overflow-x-auto whitespace-pre-wrap rounded-lg bg-cream p-3 text-xs text-ink">{result.preview.text}</pre>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function RenderedAnswerView({ answer }: { answer: RenderedAnswer }) {
+  return (
+    <div className="space-y-3">
+      <div className="rounded-xl border border-ink/15 bg-paper p-4">
+        {answer.title && <h4 className="font-display text-lg font-extrabold">{answer.title}</h4>}
+        {answer.intro && <p className="mt-1 text-sm text-ink-soft">{answer.intro}</p>}
+        {answer.sections.map((s, i) => (
+          <div key={i} className="mt-3">
+            <p className="text-xs font-bold uppercase tracking-wide text-sage-deep">{s.heading}</p>
+            <ul className="mt-1 space-y-1 text-sm">
+              {s.items.map((it, j) => <li key={j} className={it.kind === "citation" ? "font-mono text-xs text-ink-soft" : ""}>{it.text}</li>)}
+            </ul>
+          </div>
+        ))}
+        {answer.conclusion && <p className="mt-3 text-sm italic text-ink-soft">{answer.conclusion}</p>}
+      </div>
+
+      <div className="grid gap-2 text-[11px] text-ink-soft sm:grid-cols-2">
+        <div className="rounded-lg border border-ink/15 bg-cream/60 p-2">
+          <p className="font-bold">{RC.candidateValidation} / {RC.finalValidation}</p>
+          <p className={answer.validation?.valid ? "text-sage-deep" : "text-tomato-deep"}>
+            {answer.validation?.valid ? "compiled answer validated ✓" : "final validation FAILED"}
+          </p>
+        </div>
+        <div className="rounded-lg border border-ink/15 bg-cream/60 p-2">
+          <p className="font-bold">{RC.providerMeta}</p>
+          <p>provider={answer.providerMeta.provider} · model={answer.providerMeta.model}{answer.providerMeta.latencyMs !== undefined ? ` · ${answer.providerMeta.latencyMs}ms` : ""}</p>
+        </div>
+      </div>
+      <p className="text-[11px] text-ink-soft">
+        {RC.fingerprints}: plan <span className="font-mono">{answer.planFingerprint}</span> · candidate <span className="font-mono">{answer.candidateFingerprint}</span> · final <span className="font-mono">{answer.finalFingerprint}</span>
+      </p>
     </div>
   );
 }

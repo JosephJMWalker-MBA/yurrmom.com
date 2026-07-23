@@ -156,6 +156,29 @@ export const en = {
     fingerprintLabel: "Fingerprints",
   },
 
+  renderer: {
+    heading: "Live constrained renderer",
+    localOnly: "Local development only. Disabled in production. One click sends at most one model request; no retry.",
+    intro:
+      "The model may only select and order approved answer elements and pick reviewed templates. It never retrieves, judges authority, writes facts, or generates citations. The trusted answer is compiled deterministically; the model receives a RenderContract, never a raw packet.",
+    statusEnabled: "Live renderer: enabled",
+    statusDisabled: "Live renderer: disabled — using the deterministic preview",
+    providerLabel: "Provider",
+    modelLabel: "Configured model",
+    planValidLabel: "Plan valid",
+    render: "Compose with model (1 request)",
+    rendering: "Composing…",
+    pipeline: "Valid plan → provider → candidate validation → deterministic compilation → final validation",
+    resultRendered: "Model-composed answer (deterministically compiled & validated)",
+    resultFallback: "Deterministic fallback",
+    candidateValidation: "Candidate validation",
+    finalValidation: "Final-render validation",
+    rejectionReasons: "Rejection reasons",
+    fingerprints: "Fingerprints",
+    providerMeta: "Provider metadata",
+    note: "No chat, no assistant persona. The model reorganizes approved elements; it does not reason over sources or answer independently.",
+  },
+
   buttons: {
     edit: "Edit",
     preview: "Preview",
