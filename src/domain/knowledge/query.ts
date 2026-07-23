@@ -43,6 +43,8 @@ export interface KnowledgeQuery {
   householdDomain?: string;
   constraints?: string[];
   taskOrSkill?: string;
+  /** Optional jurisdiction context for authoritative eligibility (Phase 5). */
+  jurisdiction?: string;
   /** Hard filter: only units whose provenance source type is in this set. */
   sourceTypeFilters?: SourceType[];
   systemScope?: string;
@@ -61,9 +63,18 @@ export interface NormalizedQuery {
   householdDomain?: string;
   constraints: string[];
   taskOrSkill?: string;
+  jurisdiction?: string;
   sourceTypeFilters: SourceType[];
   systemScope?: string;
   creatorScope?: string;
+}
+
+/** Per-hit authoritative-eligibility outcome (Phase 5; curated-claim units). */
+export interface HitEligibility {
+  eligible: boolean;
+  reasons: string[];
+  sourceScope: string;
+  queryScope: string;
 }
 
 export interface EvidenceHit {
@@ -78,6 +89,8 @@ export interface EvidenceHit {
   localeStatus: string;
   /** Hit-level warnings, e.g. "lived experience, not authoritative guidance". */
   warnings: string[];
+  /** Present only for curated-claim units under a high-stakes query. */
+  authoritativeEligibility?: HitEligibility;
 }
 
 export type CoverageStatus =
@@ -110,4 +123,18 @@ export interface EvidencePacket {
   /** Aggregated creator-stated limitations from the returned hits. */
   limitations: string[];
   insufficientSupportReason?: string;
+  /** High-stakes authoritative-support accounting (Phase 5). */
+  authoritativeSummary?: AuthoritativeSummary;
+}
+
+export interface AuthoritativeSummary {
+  /** True when the query's risk category demands authoritative support. */
+  required: boolean;
+  /** True when at least one eligible authoritative claim was retrieved. */
+  present: boolean;
+  eligibleClaimCount: number;
+  /** Curated-claim units that matched but were NOT eligible, and why. */
+  ineligibleReasons: string[];
+  /** Unresolved conflicts among matched claims. */
+  conflictWarnings: string[];
 }

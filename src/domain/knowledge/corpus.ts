@@ -11,6 +11,12 @@ export function buildCorpus(
   systems: readonly HouseholdSystem[],
   lists: readonly PortableList[],
   creators: readonly Creator[],
+  /**
+   * Phase 5: pre-projected curated-claim units (from a ReferenceRegistry).
+   * Defaults to empty so all Phase 4 callers are unaffected. The reference
+   * layer projects these — the knowledge layer never imports the registry.
+   */
+  referenceUnits: readonly KnowledgeUnit[] = [],
 ): KnowledgeUnit[] {
   const creatorByHandle = new Map(creators.map((c) => [c.handle, c]));
   const units: KnowledgeUnit[] = [];
@@ -20,6 +26,7 @@ export function buildCorpus(
       ...projectSystem(system, systemLists, creatorByHandle.get(system.creatorHandle)),
     );
   }
+  units.push(...referenceUnits);
   // Stable global order by id — retrieval re-sorts by score, but a stable
   // base order keeps any un-scored enumeration reproducible too.
   return units.sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));

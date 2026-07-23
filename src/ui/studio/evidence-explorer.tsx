@@ -59,6 +59,7 @@ const kindLabel: Record<KnowledgeUnit["kind"], string> = {
   "list-item": "List item",
   routine: "Routine",
   recipe: "Recipe",
+  "curated-claim": "Curated reference claim",
 };
 
 const sourceTypeLabel: Record<string, string> = {

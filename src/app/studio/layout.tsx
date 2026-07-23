@@ -15,6 +15,7 @@ const studioLinks = [
   { href: "/studio/systems", label: copy.studio.systems },
   { href: "/studio/capture", label: copy.studio.capture },
   { href: "/studio/intelligence", label: copy.studio.intelligence },
+  { href: "/studio/references", label: copy.studio.references },
 ];
 
 /**
@@ -29,15 +30,18 @@ export default function StudioLayout({
     <div className="min-h-screen bg-cream">
       <div className="border-b border-ink/15 bg-paper">
         <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-2 px-4 py-2.5">
-          <nav aria-label={copy.studio.navLabel} className="flex items-center gap-4">
-            <span className="font-display text-sm font-extrabold uppercase tracking-wide text-sage-deep">
+          <nav
+            aria-label={copy.studio.navLabel}
+            className="flex min-w-0 items-center gap-4 overflow-x-auto whitespace-nowrap"
+          >
+            <span className="shrink-0 font-display text-sm font-extrabold uppercase tracking-wide text-sage-deep">
               {copy.studio.name}
             </span>
             {studioLinks.map((l) => (
               <Link
                 key={l.href}
                 href={l.href}
-                className="text-[13px] font-semibold text-ink-soft transition-colors hover:text-sage-deep"
+                className="shrink-0 text-[13px] font-semibold text-ink-soft transition-colors hover:text-sage-deep"
               >
                 {l.label}
               </Link>

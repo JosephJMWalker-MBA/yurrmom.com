@@ -52,8 +52,47 @@ export const en = {
     systems: "Systems",
     capture: "Capture",
     intelligence: "Evidence",
+    references: "References",
     editingAs: "Editing as {name} · seeded identity",
     identityTitle: "Seeded demo identity — real accounts arrive in a later phase",
+  },
+
+  references: {
+    title: "Reference Desk",
+    tagline:
+      "Where legitimate reference material enters the corpus — scoped, cited, reviewed, and honestly labeled. Being published by a big name grants no authority; a reviewed, in-scope assessment does.",
+    persistenceNote:
+      "Editorial data is saved to this device only and is never presented as globally published. A backend replaces this seam later.",
+    sourcesHeading: "Sources",
+    publisherHeading: "Publisher",
+    versionsHeading: "Versions (immutable)",
+    spansHeading: "Evidence spans",
+    claimsHeading: "Curated claims",
+    assessmentHeading: "Authority assessment",
+    reviewHeading: "Review checklist",
+    eligibilityHeading: "Retrieval eligibility",
+    addSource: "Add source",
+    addVersion: "Add new version",
+    addSpan: "Add evidence span",
+    addClaim: "Draft a claim",
+    linkEvidence: "Link evidence",
+    runReview: "Run review checklist",
+    approve: "Approve for platform use (within scope)",
+    returnRevision: "Return for revision",
+    supersede: "Supersede",
+    withdraw: "Withdraw",
+    checkEligibility: "Check authoritative eligibility",
+    openExplorer: "Open in Evidence Explorer →",
+    reset: "Reset editorial data on this device",
+    approvedScopeNote:
+      "“Approved” means approved for platform use within the recorded scope — not universal truth.",
+    interpretationDirect: "Direct statement",
+    interpretationParaphrase: "Faithful paraphrase",
+    interpretationInference: "Editorial inference (labeled; cannot alone satisfy high-stakes)",
+    ingestionNote:
+      "Manual entry / local import only. No web fetching, scraping, or PDF parsing in this phase.",
+    emptyAuthorityNote:
+      "This registry contains no authoritative source. High-stakes queries stay “authoritative support required” until a reviewed, in-scope source is entered.",
   },
 
   intelligence: {

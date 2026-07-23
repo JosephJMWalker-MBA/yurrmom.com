@@ -33,12 +33,15 @@ import type { TranslationRecord } from "../translation";
 import { languageOf, localeLabel, localeNames } from "../i18n";
 import { resolveRepresentation } from "./representation";
 import { normalizeText, tokenize } from "./text";
+import { evaluateAuthoritativeEligibility } from "./eligibility";
 import type { KnowledgeUnit } from "./unit";
 import {
   HIGH_STAKES_RISKS,
+  type AuthoritativeSummary,
   type CoverageStatus,
   type EvidenceHit,
   type EvidencePacket,
+  type HitEligibility,
   type KnowledgeQuery,
   type NormalizedQuery,
 } from "./query";
@@ -107,6 +110,7 @@ function normalizeQuery(q: KnowledgeQuery): NormalizedQuery {
     householdDomain: q.householdDomain?.trim() || undefined,
     constraints: (q.constraints ?? []).filter(Boolean),
     taskOrSkill: q.taskOrSkill?.trim() || undefined,
+    jurisdiction: q.jurisdiction?.trim() || undefined,
     sourceTypeFilters: q.sourceTypeFilters ?? [],
     systemScope: q.systemScope || undefined,
     creatorScope: q.creatorScope || undefined,
@@ -213,15 +217,31 @@ export function retrieve(
   corpus: readonly KnowledgeUnit[],
   translations: readonly TranslationRecord[],
   limit = 12,
+  /** Evaluation "now" for eligibility currency checks — injectable for tests. */
+  now: Date = new Date(),
 ): EvidencePacket {
   const nq = normalizeQuery(query);
 
-  // Hard source-type filter (does not affect scores; just eligibility).
-  const eligible = corpus.filter(
-    (u) =>
-      nq.sourceTypeFilters.length === 0 ||
-      nq.sourceTypeFilters.includes(u.provenanceSourceType),
-  );
+  // Hard source-type filter (does not affect scores; just eligibility) PLUS
+  // the Phase 5 public-safe rule: unapproved curated claims (drafts, in-review,
+  // needs-revision, superseded) are NEVER shown in public-safe retrieval.
+  // Editorial inspection may see them, carrying their status and warnings.
+  const eligible = corpus.filter((u) => {
+    if (
+      nq.sourceTypeFilters.length > 0 &&
+      !nq.sourceTypeFilters.includes(u.provenanceSourceType)
+    ) {
+      return false;
+    }
+    if (
+      u.kind === "curated-claim" &&
+      query.representationPolicy === "public-safe" &&
+      u.claim?.claimStatus !== "approved"
+    ) {
+      return false;
+    }
+    return true;
+  });
 
   const scored = eligible
     .map((u) => scoreUnit(u, nq))
@@ -272,11 +292,43 @@ export function retrieve(
         `This segment is ${s.unit.derivation}, not the creator's original words.`,
       );
     }
-    // High-stakes labeling of lived experience.
-    if (highStakes && !AUTHORITATIVE_TYPES.includes(s.unit.provenanceSourceType)) {
+    // High-stakes labeling of lived experience (NOT curated claims).
+    if (
+      highStakes &&
+      s.unit.kind !== "curated-claim" &&
+      !AUTHORITATIVE_TYPES.includes(s.unit.provenanceSourceType)
+    ) {
       warnings.push(
         `Lived household experience, clearly labeled — not authoritative ${RISK_LABEL[query.guidanceRisk]} guidance.`,
       );
+    }
+
+    // Phase 5: curated-claim eligibility + interpretation honesty.
+    let authoritativeEligibility: HitEligibility | undefined;
+    if (s.unit.kind === "curated-claim" && s.unit.claim) {
+      const elig = evaluateAuthoritativeEligibility(s.unit.claim, {
+        risk: query.guidanceRisk,
+        domain: nq.householdDomain,
+        jurisdiction: nq.jurisdiction,
+        now,
+      });
+      authoritativeEligibility = {
+        eligible: elig.eligible,
+        reasons: elig.reasons,
+        sourceScope: elig.sourceScope,
+        queryScope: elig.queryScope,
+      };
+      elig.warnings.forEach((w) => warnings.push(w));
+      if (s.unit.claim.interpretationLevel === "editorial-inference") {
+        warnings.push(
+          "Editorial inference — labeled as inference; cannot independently satisfy authoritative support.",
+        );
+      }
+      if (s.unit.claim.claimStatus !== "approved") {
+        warnings.push(
+          `Curated claim is ${s.unit.claim.claimStatus} — shown for editorial inspection only, not as approved knowledge.`,
+        );
+      }
     }
 
     const localeStatus =
@@ -294,6 +346,7 @@ export function retrieve(
       representation: rep,
       localeStatus,
       warnings,
+      authoritativeEligibility,
     };
   });
 
@@ -313,10 +366,29 @@ export function retrieve(
     ),
   );
 
-  // Coverage verdict.
-  const hasApplicableAuthoritative = hits.some((h) =>
-    AUTHORITATIVE_TYPES.includes(h.unit.provenanceSourceType),
+  // Coverage verdict — Phase 5: authoritative support is an ELIGIBLE curated
+  // claim, never a SourceType value on its own.
+  const claimHits = hits.filter((h) => h.unit.kind === "curated-claim");
+  const eligibleClaimHits = claimHits.filter(
+    (h) => h.authoritativeEligibility?.eligible,
   );
+  const hasApplicableAuthoritative = eligibleClaimHits.length > 0;
+
+  // Unresolved conflicts among any matched claims stay visible and prevent
+  // presenting one side as uncontested.
+  const conflictWarnings = Array.from(
+    new Set(
+      claimHits.flatMap((h) =>
+        (h.unit.claim?.conflicts ?? [])
+          .filter((c) => c.relation === "conflicts-with" && !c.resolved)
+          .map(
+            (c) =>
+              `Unresolved conflict: claim "${h.unit.claim!.claimId}" is contested by "${c.otherClaimId}". The platform will not present either side as settled.`,
+          ),
+      ),
+    ),
+  );
+
   let coverage: CoverageStatus;
   let insufficientSupportReason: string | undefined;
   const warnings: string[] = [];
@@ -327,14 +399,40 @@ export function retrieve(
       "No source-backed material matched this query.";
   } else if (highStakes && !hasApplicableAuthoritative) {
     coverage = "authoritative-support-required";
-    insufficientSupportReason = `This is a ${RISK_LABEL[query.guidanceRisk]} question. The matched material is lived household experience, not authoritative ${RISK_LABEL[query.guidanceRisk]} guidance, and no applicable authoritative reference exists in the corpus. Absence of evidence is reported as insufficiency, not turned into advice.`;
+    insufficientSupportReason =
+      conflictWarnings.length > 0
+        ? `This is a ${RISK_LABEL[query.guidanceRisk]} question. Matched authoritative material is in unresolved conflict, so no side can be presented as settled. Personal experience remains labeled as experience.`
+        : `This is a ${RISK_LABEL[query.guidanceRisk]} question. The matched material is lived household experience, not authoritative ${RISK_LABEL[query.guidanceRisk]} guidance, and no eligible authoritative claim exists in the corpus. Absence of evidence is reported as insufficiency, not turned into advice.`;
     warnings.push(
       `Guidance risk "${query.guidanceRisk}": experience may inform, but cannot substitute for authoritative ${RISK_LABEL[query.guidanceRisk]} guidance.`,
     );
+  } else if (highStakes && conflictWarnings.length > 0) {
+    // Eligible support exists but material conflict is present → qualify coverage.
+    coverage = "partial";
   } else {
     const strong = hits.some((h) => h.score >= STRONG_SCORE);
     coverage = strong ? "sufficient-for-household-exploration" : "partial";
   }
+
+  conflictWarnings.forEach((w) => warnings.push(w));
+
+  // Authoritative summary — makes before/after eligibility observable.
+  const ineligibleReasons = Array.from(
+    new Set(
+      claimHits
+        .filter((h) => !h.authoritativeEligibility?.eligible)
+        .flatMap((h) => h.authoritativeEligibility?.reasons ?? []),
+    ),
+  );
+  const authoritativeSummary: AuthoritativeSummary | undefined = highStakes
+    ? {
+        required: true,
+        present: hasApplicableAuthoritative,
+        eligibleClaimCount: eligibleClaimHits.length,
+        ineligibleReasons,
+        conflictWarnings,
+      }
+    : undefined;
 
   if (unapprovedOrStalePresent && query.representationPolicy === "public-safe") {
     warnings.push(
@@ -367,6 +465,7 @@ export function retrieve(
     warnings,
     limitations,
     insufficientSupportReason,
+    authoritativeSummary,
   };
 }
 

@@ -11,4 +11,5 @@ export * from "./unit";
 export * from "./corpus";
 export * from "./representation";
 export * from "./query";
+export * from "./eligibility";
 export * from "./retrieval";
