@@ -1,10 +1,10 @@
 # YurrMom.com
 
-**YurrMom preserves and distributes practical household knowledge so families do not have to reinvent everyday life from scratch.**
+**YurrMom.com preserves and distributes practical household knowledge so families do not have to reinvent everyday life from scratch.**
 
 Every household develops hard-won systems for meals, groceries, cleaning, caregiving, budgeting, school, organization, travel, celebrations, and thousands of small recurring decisions. That knowledge is usually scattered across private conversations, social posts, videos, notebooks, and memory.
 
-YurrMom turns lived experience into reusable household systems that other people can discover, adapt, and act on.
+yurrmom.com turns lived experience into reusable household systems that other people can discover, adapt, and act on.
 
 ## The core idea
 
@@ -23,12 +23,12 @@ The useful unit is not the affiliate link. It is the transferable experience sur
 
 ## Product model
 
-YurrMom combines four reinforcing layers:
+YurrMom.com combines four reinforcing layers:
 
 1. **Household knowledge** — systems, lists, routines, recipes, stories, and practical guidance
 2. **Creator infrastructure** — create once, enrich once, and prepare content for many channels
 3. **Entertainment and discovery** — roasts, humorous campaigns, and shareable content that bring people into the ecosystem
-4. **YurrMom merchandise** — original Printful merchandise that funds the platform without taking commissions from creator affiliate earnings
+4. **YurrMom.com merchandise** — original Printful merchandise that funds the platform without taking commissions from creator affiliate earnings
 
 Creators retain ownership of their identity, audience, affiliate relationships, sponsorships, and content. YurrMom is designed to become a valuable additional publishing and discovery channel—not another platform that extracts a percentage from their recommendations.
 
@@ -47,13 +47,13 @@ The platform should never require one retailer, one affiliate network, one socia
 - Entertainment attracts; usefulness retains
 - Lists must remain portable
 - Existing shopping and delivery infrastructure should be connected, not rebuilt
-- YurrMom does not take a commission on creator affiliate earnings
-- YurrMom merchandise is the primary native revenue engine
+- YurrMom.com does not take a commission on creator affiliate earnings
+- YurrMom.com merchandise is the primary native revenue engine
 - Every feature should reduce duplicated household labor or creator labor
 
 ## Repository purpose
 
-This repository begins as a product-context and design specification for building YurrMom.com with Fable 5. It should communicate the mission, business model, users, domain objects, workflows, constraints, and phased implementation clearly enough that an AI coding system or human team can make coherent decisions without flattening YurrMom into a generic affiliate site, social network, or inventory manager.
+It should communicate the mission, business model, users, domain objects, workflows, constraints, and phased implementation clearly enough that an AI coding system or human team can make coherent decisions without flattening YurrMom.com into a generic affiliate site, social network, or inventory manager.
 
 Start with:
 
