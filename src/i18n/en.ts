@@ -51,8 +51,46 @@ export const en = {
     overview: "Overview",
     systems: "Systems",
     capture: "Capture",
+    intelligence: "Evidence",
     editingAs: "Editing as {name} · seeded identity",
     identityTitle: "Seeded demo identity — real accounts arrive in a later phase",
+  },
+
+  intelligence: {
+    title: "Evidence Explorer",
+    tagline:
+      "Deterministic retrieval over source-backed household knowledge. This returns evidence with provenance — not an answer, and not a chatbot.",
+    queryLabel: "What are you looking for?",
+    queryHint: "Plain words. Retrieval matches source-backed segments; it never writes new claims.",
+    localeLabel: "Requested language",
+    modeLabel: "Retrieval mode",
+    modePublicSafe: "Public-safe",
+    modeEditorial: "Editorial inspection",
+    modePublicSafeHint:
+      "Serves originals and current creator-approved translations only. Drafts and stale translations are withheld.",
+    modeEditorialHint:
+      "May surface machine/human drafts and stale translations — always with full status and caution.",
+    riskLabel: "Guidance-risk category",
+    riskHint:
+      "You set this — it is never inferred. High-stakes categories require authoritative support before evidence is called sufficient.",
+    domainLabel: "Household domain (optional)",
+    constraintLabel: "Constraint (optional)",
+    skillLabel: "Task or skill (optional)",
+    circumstanceLabel: "Household circumstance (optional)",
+    devStageLabel: "Developmental stage (optional)",
+    run: "Run retrieval",
+    presetsLabel: "Seeded evaluation cases",
+    noHits: "No source-backed material matched this query.",
+    coverageHeading: "Coverage",
+    warningsHeading: "Warnings",
+    limitationsHeading: "Stated limitations (from matched sources)",
+    localeHeading: "Language & translation",
+    sourceMixHeading: "Source mix",
+    reasonsHeading: "Why it matched",
+    packetNote:
+      "This is an evidence packet. It contains ranked source excerpts and provenance — no synthesized advice.",
+    viewPublic: "View public source ↗",
+    viewStudio: "Open in Studio ↗",
   },
 
   buttons: {

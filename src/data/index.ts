@@ -10,3 +10,5 @@ export { currentRoast } from "./roast";
 export { merch, getMerch } from "./merch";
 export { situations, systemsForSituation } from "./situations";
 export { translationRecords, getTranslationsForSystem } from "./translations";
+export { knowledgeCorpus, knowledgeTranslations } from "./knowledge-corpus";
+export { evaluationCases, getEvaluationCase } from "./evaluation-cases";
