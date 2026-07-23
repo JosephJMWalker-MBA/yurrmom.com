@@ -6,6 +6,7 @@ import { useWorkspace } from "@/ui/studio/use-workspace";
 import { StatusBadge } from "@/ui/studio/status";
 import { SystemArticle } from "@/ui/system-article";
 import { ListInteractive } from "@/ui/client/list-interactive";
+import { getTranslationsForSystem } from "@/data";
 
 /**
  * Public-page preview — rendered with the exact same components the public
@@ -61,6 +62,7 @@ export default function PreviewSystemPage() {
           context={ws.context}
           lists={ws.lists}
           mode="preview"
+          translations={getTranslationsForSystem(ws.system.slug)}
         />
 
         {/* List page previews — same interactive component as the live route */}

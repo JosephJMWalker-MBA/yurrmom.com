@@ -38,6 +38,12 @@ export const adapters = {
     state: "planned",
     publicNote: "The shop is a preview. Checkout opens when fulfillment is actually connected.",
   },
+  translation: {
+    name: "Translation",
+    state: "planned",
+    publicNote:
+      "Translations are shown with full provenance when they exist. Nothing generates them yet — no provider is connected.",
+  },
 } as const satisfies Record<string, AdapterStatus>;
 
 /** Human labels for badge rendering. */

@@ -163,6 +163,57 @@ export function RoutinesSection({ ws, update }: { ws: WorkspaceSystem; update: U
               </Field>
             </div>
 
+            {/* Culture & translation readiness — optional, honest (Phase 3) */}
+            <details className="mt-3 rounded-lg border border-ink/15 bg-paper p-3">
+              <summary className="cursor-pointer text-sm font-bold text-sage-deep">
+                Does this transfer across cultures &amp; languages? (optional)
+              </summary>
+              <p className="mt-2 text-xs text-ink-soft">
+                Some practices depend on local labels, laws, stores, or customs.
+                Saying so here keeps a future translation from giving someone
+                false confidence.
+              </p>
+              <div className="mt-3 space-y-3">
+                <Field
+                  label="How this varies by culture or household"
+                  htmlFor={`r-${ri}-culture`}
+                >
+                  <TextArea
+                    id={`r-${ri}-culture`}
+                    rows={2}
+                    value={routine.culturalNote ?? ""}
+                    onChange={(e) =>
+                      update(
+                        (d) =>
+                          void (d.system.routines[ri].culturalNote =
+                            e.target.value),
+                      )
+                    }
+                    placeholder="Built around US grocery labeling; the zone idea transfers anywhere…"
+                  />
+                </Field>
+                <Field
+                  label="Caution for translators"
+                  hint="What would break if this were translated word-for-word?"
+                  htmlFor={`r-${ri}-transcaution`}
+                >
+                  <TextArea
+                    id={`r-${ri}-transcaution`}
+                    rows={2}
+                    value={routine.translationCaution ?? ""}
+                    onChange={(e) =>
+                      update(
+                        (d) =>
+                          void (d.system.routines[ri].translationCaution =
+                            e.target.value),
+                      )
+                    }
+                    placeholder="Certification marks differ by country — the label check must be re-taught locally…"
+                  />
+                </Field>
+              </div>
+            </details>
+
             {/* Cred at Home structural seam — human, optional, no scores */}
             <details className="mt-3 rounded-lg border border-ink/15 bg-paper p-3">
               <summary className="cursor-pointer text-sm font-bold text-sage-deep">
