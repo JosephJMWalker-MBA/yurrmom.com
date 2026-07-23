@@ -15,11 +15,11 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "YurrMom — Steal a household system that actually works",
-    template: "%s · YurrMom",
+    default: "yurrmom.com — Steal a household system that actually works",
+    template: "%s · yurrmom.com",
   },
   description:
-    "YurrMom preserves and distributes practical household knowledge so families don't have to reinvent everyday life from scratch.",
+    "yurrmom.com preserves and distributes practical household knowledge so families don't have to reinvent everyday life from scratch.",
 };
 
 const navLinks = [
@@ -52,8 +52,8 @@ export default function RootLayout({
               href="/"
               className="font-display text-lg font-extrabold tracking-tight sm:text-xl"
             >
-              YURR<span className="text-tomato">MOM</span>
-              <span className="text-mustard">.</span>
+              yurr<span className="text-tomato">mom</span>
+              <span className="text-mustard">.com</span>
             </Link>
             <div className="flex min-w-0 items-center gap-3 overflow-x-auto whitespace-nowrap sm:gap-5">
               {navLinks.map((l) => (
@@ -74,8 +74,8 @@ export default function RootLayout({
         <footer className="no-print mt-16 border-t-2 border-ink bg-ink text-cream">
           <div className="mx-auto max-w-5xl px-4 py-10">
             <p className="font-display text-xl font-bold">
-              YURR<span className="text-tomato">MOM</span>
-              <span className="text-mustard">.</span>
+              yurr<span className="text-tomato">mom</span>
+              <span className="text-mustard">.com</span>
             </p>
             <p className="mt-2 max-w-xl text-sm text-cream/80">
               We preserve and distribute practical household knowledge, so
@@ -100,7 +100,7 @@ export default function RootLayout({
                   <li>Creators keep 100% of their affiliate earnings.</li>
                   <li>Lists stay portable — no retailer owns them.</li>
                   <li>Roast subjects are fictional. Always.</li>
-                  <li>YurrMom earns from its own merch, not from creators.</li>
+                  <li>yurrmom.com earns from its own merch, not from creators.</li>
                 </ul>
               </div>
               <div>
@@ -117,7 +117,7 @@ export default function RootLayout({
             <p className="mt-8 border-t border-cream/20 pt-4 text-xs text-cream/60">
               Affiliate disclosure: creator pages may contain the creator&apos;s own
               affiliate links, marked where they appear. Purchases through them may
-              earn that creator a commission. YurrMom takes 0% of creator affiliate
+              earn that creator a commission. yurrmom.com takes 0% of creator affiliate
               earnings.
             </p>
           </div>

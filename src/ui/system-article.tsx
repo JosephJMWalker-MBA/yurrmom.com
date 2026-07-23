@@ -18,7 +18,7 @@ const sourceTypeLabels: Record<SourceType, { label: string; caveat: string }> = 
   "professional-guidance": {
     label: "Professional guidance",
     caveat:
-      "The creator states relevant professional experience. YurrMom labels this claim; it does not verify credentials.",
+      "The creator states relevant professional experience. yurrmom.com labels this claim; it does not verify credentials.",
   },
   "sourced-reference": {
     label: "Sourced reference",

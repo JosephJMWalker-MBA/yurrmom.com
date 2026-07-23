@@ -9,7 +9,7 @@
  *  2. Product identity (ProductPreference.name) vs. retailer-specific offers
  *     (RetailerOffer) — an offer is never the product.
  *  3. Creator affiliate economics (RetailerOffer.affiliate → creator) vs.
- *     YurrMom merchandise (MerchItem, no creator attribution field exists).
+ *     yurrmom.com merchandise (MerchItem, no creator attribution field exists).
  *  4. Fictional roast content (RoastPrompt.fiction is mandatory) vs. real
  *     people — there is no way to express a real-person roast subject.
  *
@@ -134,7 +134,7 @@ export interface Recipe {
 
 /**
  * What kind of knowledge this is. Rendered plainly wherever the system is
- * shown, so YurrMom never implies medical, legal, nutritional, educational,
+ * shown, so yurrmom.com never implies medical, legal, nutritional, educational,
  * or developmental authority that has not been established.
  */
 export type SourceType =
@@ -206,7 +206,7 @@ export interface RetailerOffer {
   retailer: string;
   url: string;
   state: Extract<AdapterState, "link-only">;
-  /** Affiliate attribution belongs to the CREATOR. YurrMom takes 0%. */
+  /** Affiliate attribution belongs to the CREATOR. yurrmom.com takes 0%. */
   affiliate: boolean;
   note?: string;
 }
@@ -281,7 +281,7 @@ export interface RoastPrompt {
 // ------------------------------------------------------------------- merch
 
 /**
- * YurrMom-owned merchandise. Deliberately has NO creator/affiliate fields —
+ * yurrmom.com-owned merchandise. Deliberately has NO creator/affiliate fields —
  * this revenue path never mixes with creator economics (separation 3).
  */
 export interface MerchItem {

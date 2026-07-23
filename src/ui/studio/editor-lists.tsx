@@ -329,7 +329,7 @@ export function ListsSection({ ws, update }: { ws: WorkspaceSystem; update: Upda
                           </div>
                           <p className="mt-1.5 text-[11px] text-ink-soft">
                             Affiliate links are marked publicly and the earnings
-                            are 100% yours. Links are link-only — YurrMom never
+                            are 100% yours. Links are link-only — yurrmom.com never
                             fakes cart sync.
                           </p>
                         </div>

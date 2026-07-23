@@ -47,7 +47,7 @@ export function ContextSection({ ws, update }: { ws: WorkspaceSystem; update: Up
 
       <Field
         label="Dietary or medical constraints"
-        hint="Medical facts stay yours to state — YurrMom never diagnoses."
+        hint="Medical facts stay yours to state — yurrmom.com never diagnoses."
         htmlFor="ctx-diet"
       >
         <ChipsInput

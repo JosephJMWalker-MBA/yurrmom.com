@@ -5,8 +5,8 @@ import { SEED_IDENTITY_HANDLE } from "@/data/workspace-repo";
 import { IdentityBadge } from "@/ui/studio/status";
 
 export const metadata: Metadata = {
-  title: { default: "Studio", template: "%s · Studio · YurrMom" },
-  description: "The YurrMom creator workspace — document a household system once.",
+  title: { default: "Studio", template: "%s · Studio · yurrmom.com" },
+  description: "The yurrmom.com creator workspace — document a household system once.",
 };
 
 const studioLinks = [

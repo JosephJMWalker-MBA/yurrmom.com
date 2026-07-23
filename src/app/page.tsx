@@ -106,7 +106,7 @@ export default function HomePage() {
           Portable lists
         </h2>
         <p className="mt-2 max-w-2xl text-ink-soft">
-          A YurrMom list belongs to you, not to a retailer. Check it off in the
+          A yurrmom.com list belongs to you, not to a retailer. Check it off in the
           store, print it, export it, or open the creator&apos;s links — your call.
         </p>
         <div className="mt-6 grid gap-4 sm:grid-cols-3">
@@ -140,7 +140,7 @@ export default function HomePage() {
         <div className="mt-4 grid gap-6 sm:grid-cols-2">
           <p className="leading-relaxed text-cream/90">
             Document the system you already run — the context, the lists, the
-            why. YurrMom turns that one source into a durable resource plus
+            why. yurrmom.com turns that one source into a durable resource plus
             channel-ready drafts for the places you already post.
           </p>
           <div className="rounded-2xl border-2 border-cream/40 bg-sage-deep p-4">
@@ -148,7 +148,7 @@ export default function HomePage() {
               You keep 100% of your affiliate earnings.
             </p>
             <p className="mt-1 text-sm text-cream/90">
-              Your links, your attribution, your sponsors, your audience. YurrMom
+              Your links, your attribution, your sponsors, your audience. yurrmom.com
               takes zero commission — the platform pays for itself with its own
               merch, not with a cut of yours.
             </p>
@@ -160,7 +160,7 @@ export default function HomePage() {
         </p>
       </section>
 
-      {/* 7 — YurrMom merchandise */}
+      {/* 7 — yurrmom.com merchandise */}
       <section aria-labelledby="merch" className="py-12">
         <div className="flex flex-wrap items-center gap-2">
           <Kicker>The shop</Kicker>
@@ -170,7 +170,7 @@ export default function HomePage() {
           Merch that pays the bills — <span className="text-tomato">ours, not the creators&apos;</span>
         </h2>
         <p className="mt-2 max-w-2xl text-ink-soft">
-          Original YurrMom designs fund the platform. That&apos;s the whole business
+          Original yurrmom.com designs fund the platform. That&apos;s the whole business
           model, and it&apos;s why creator links stay commission-free.
         </p>
         <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
@@ -207,7 +207,7 @@ export default function HomePage() {
         <p className="mt-3 max-w-3xl leading-relaxed text-ink-soft">
           Every household reinvents daily life from scratch — meals, laundry,
           groceries, night feeds — as if nobody ever solved it before. They have.
-          YurrMom captures that lived experience as reusable systems and portable
+          yurrmom.com captures that lived experience as reusable systems and portable
           lists, so you can start from proven instead of from zero. Creators keep
           ownership of everything they bring: their audience, their content, their
           affiliate earnings. Humor gets people in the door; usefulness is why they stay.

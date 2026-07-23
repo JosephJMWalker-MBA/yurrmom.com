@@ -80,7 +80,7 @@ export const currentRoast: RoastPrompt = {
     {
       label: "Put Deb on a mug",
       href: "/shop",
-      blurb: "Original YurrMom merch. It funds the platform so creators keep 100% of their affiliate earnings.",
+      blurb: "Original yurrmom.com merch. It funds the platform so creators keep 100% of their affiliate earnings.",
     },
   ],
 };

@@ -1,7 +1,7 @@
 import type { MerchItem } from "@/domain/types";
 
 /**
- * Original YurrMom merchandise — the platform's OWN revenue engine (docs/00 §9).
+ * Original yurrmom.com merchandise — the platform's OWN revenue engine (docs/00 §9).
  * Deliberately separate from creator affiliate economics: no creator attribution
  * exists on these items, structurally (docs/07 separation 3).
  * Fulfillment is a Printful adapter in `planned` state — the shop is presented

@@ -8,9 +8,9 @@ type Update = (fn: (ws: WorkspaceSystem) => void) => void;
 
 const sourceTypeNotes: Record<SourceType, string> = {
   "personal-experience":
-    "Renders publicly as lived experience — what worked in one real household. YurrMom will not present it as medical, legal, nutritional, educational, or developmental authority.",
+    "Renders publicly as lived experience — what worked in one real household. yurrmom.com will not present it as medical, legal, nutritional, educational, or developmental authority.",
   "professional-guidance":
-    "Only choose this if you hold relevant credentials you can name below. YurrMom labels what you tell it — it does not verify credentials, and the public page will say so.",
+    "Only choose this if you hold relevant credentials you can name below. yurrmom.com labels what you tell it — it does not verify credentials, and the public page will say so.",
   "sourced-reference":
     "You're relaying information from an external source. Name the source below so readers can weigh it themselves.",
 };

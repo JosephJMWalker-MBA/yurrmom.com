@@ -97,7 +97,7 @@ export const systems: HouseholdSystem[] = [
       },
     ],
     disclosure:
-      "Some retailer links on this system are Maya's affiliate links. If you buy through them, Maya may earn a commission. YurrMom takes 0% of it — creator earnings are the creator's.",
+      "Some retailer links on this system are Maya's affiliate links. If you buy through them, Maya may earn a commission. yurrmom.com takes 0% of it — creator earnings are the creator's.",
     provenance: {
       sourceType: "personal-experience",
       livedExperience: true,
@@ -166,7 +166,7 @@ export const systems: HouseholdSystem[] = [
     ],
     recipes: [],
     disclosure:
-      "Retailer links in this system's kit list are Dee's own links; some are affiliate. If you buy through them, Dee may earn a commission. YurrMom takes 0%.",
+      "Retailer links in this system's kit list are Dee's own links; some are affiliate. If you buy through them, Dee may earn a commission. yurrmom.com takes 0%.",
     relatedSystemSlugs: ["celiac-safe-pantry-reset", "two-am-field-kit"],
   },
   {
@@ -213,7 +213,7 @@ export const systems: HouseholdSystem[] = [
     ],
     recipes: [],
     disclosure:
-      "Some links in this kit are Sam's affiliate links. Purchases through them may earn Sam a commission. YurrMom takes 0%.",
+      "Some links in this kit are Sam's affiliate links. Purchases through them may earn Sam a commission. yurrmom.com takes 0%.",
     relatedSystemSlugs: ["celiac-safe-pantry-reset", "family-of-six-laundry-line"],
   },
 ];

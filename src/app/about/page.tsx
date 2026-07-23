@@ -3,9 +3,9 @@ import Link from "next/link";
 import { Kicker } from "@/ui/badges";
 
 export const metadata: Metadata = {
-  title: "About — Why YurrMom exists",
+  title: "About — Why yurrmom.com exists",
   description:
-    "YurrMom preserves and distributes practical household knowledge so families don't have to reinvent everyday life from scratch.",
+    "yurrmom.com preserves and distributes practical household knowledge so families don't have to reinvent everyday life from scratch.",
 };
 
 /**
@@ -28,7 +28,7 @@ export default function AboutPage() {
         </p>
         <p>
           <span className="font-bold text-ink">
-            YurrMom captures lived household experience as reusable systems
+            yurrmom.com captures lived household experience as reusable systems
           </span>{" "}
           — with the context, the lists, the substitutions, and the story of
           what failed first — so another family can find one that resembles
@@ -42,11 +42,11 @@ export default function AboutPage() {
         {[
           {
             title: "Creators are partners, not inventory.",
-            body: "Creators keep their identity, audience, content, sponsorships, and affiliate accounts. YurrMom takes 0% of creator affiliate earnings — not a reduced rate, not a fee. Zero.",
+            body: "Creators keep their identity, audience, content, sponsorships, and affiliate accounts. yurrmom.com takes 0% of creator affiliate earnings — not a reduced rate, not a fee. Zero.",
           },
           {
             title: "Lists are portable.",
-            body: "A YurrMom list describes needs, not SKUs. Print it, copy it, export it, check it off in any store, or open the creator's links. No retailer owns it.",
+            body: "A yurrmom.com list describes needs, not SKUs. Print it, copy it, export it, check it off in any store, or open the creator's links. No retailer owns it.",
           },
           {
             title: "The roast is fictional. Always.",
@@ -54,7 +54,7 @@ export default function AboutPage() {
           },
           {
             title: "Merch funds the platform.",
-            body: "YurrMom earns from its own original merchandise. That native revenue is exactly why the creator promise can stay generous.",
+            body: "yurrmom.com earns from its own original merchandise. That native revenue is exactly why the creator promise can stay generous.",
           },
           {
             title: "Nothing pretends.",
