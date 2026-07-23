@@ -7,11 +7,13 @@ import { sectionProgress } from "@/domain/workspace";
 import type { WorkspaceSystem } from "@/domain/workspace";
 import { useWorkspace } from "@/ui/studio/use-workspace";
 import { SaveIndicator, StatusBadge } from "@/ui/studio/status";
+import { copy, fmt } from "@/i18n";
 import { ContextSection, PromiseSection } from "@/ui/studio/editor-basics";
 import { StorySection } from "@/ui/studio/editor-story";
 import { ListsSection } from "@/ui/studio/editor-lists";
 import { RoutinesSection } from "@/ui/studio/editor-routines";
 import { TrustSection } from "@/ui/studio/editor-trust";
+import { LanguagePanel } from "@/ui/studio/editor-language";
 import { CaptureInbox } from "@/ui/studio/editor-inbox";
 
 type SectionId = "context" | "promise" | "story" | "lists" | "routines" | "trust";
@@ -93,7 +95,7 @@ export default function EditSystemPage() {
             href={`/studio/systems/${slug}/preview`}
             className="rounded-full border border-ink/30 px-4 py-2 text-sm font-bold text-ink-soft transition-colors hover:border-sage hover:text-sage-deep"
           >
-            Preview
+            {copy.buttons.preview}
           </Link>
           <button
             type="button"
@@ -102,12 +104,17 @@ export default function EditSystemPage() {
             className="rounded-full border-2 border-ink bg-sage px-5 py-2 text-sm font-extrabold text-cream transition-colors hover:bg-sage-deep disabled:cursor-not-allowed disabled:opacity-40"
           >
             {confirmingPublish
-              ? `Confirm publish v${ws.status === "published" ? ws.system.version + 1 : ws.system.version}?`
+              ? fmt(copy.buttons.confirmPublish, {
+                  version:
+                    ws.status === "published"
+                      ? ws.system.version + 1
+                      : ws.system.version,
+                })
               : ws.status === "draft"
-                ? "Publish"
+                ? copy.buttons.publish
                 : ws.hasLocalEdits
-                  ? "Publish update"
-                  : "Published"}
+                  ? copy.buttons.publishUpdate
+                  : copy.buttons.published}
           </button>
         </div>
       </div>
@@ -165,7 +172,12 @@ export default function EditSystemPage() {
           {active === "story" && <StorySection ws={ws} update={update} />}
           {active === "lists" && <ListsSection ws={ws} update={update} />}
           {active === "routines" && <RoutinesSection ws={ws} update={update} />}
-          {active === "trust" && <TrustSection ws={ws} update={update} />}
+          {active === "trust" && (
+            <>
+              <TrustSection ws={ws} update={update} />
+              <LanguagePanel ws={ws} update={update} />
+            </>
+          )}
         </div>
       </div>
     </div>

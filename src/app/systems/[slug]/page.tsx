@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getCreator, getList, getSystem, systems } from "@/data";
+import { getCreator, getList, getSystem, getTranslationsForSystem, systems } from "@/data";
 import { SystemCard } from "@/ui/cards";
 import { SystemArticle } from "@/ui/system-article";
 import { SaveButton } from "@/ui/client/save-button";
@@ -40,6 +40,7 @@ export default async function SystemPage({
         lists={lists}
         mode="public"
         actions={<SaveButton slug={system.slug} title={system.title} />}
+        translations={getTranslationsForSystem(system.slug)}
       />
 
       {/* Related systems */}

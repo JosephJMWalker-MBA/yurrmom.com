@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import type { PortableList } from "@/domain/types";
 import { AdapterBadge, AffiliateBadge, CreatorLinkBadge } from "@/ui/badges";
 import { adapters } from "@/adapters/states";
+import { copy as uiCopy } from "@/i18n";
 import { download, listToCsv, listToJson, listToPlainText } from "@/lib/export";
 
 /**
@@ -56,17 +57,17 @@ export function ListInteractive({ list }: { list: PortableList }) {
       {/* Action bar — every button here genuinely works, on-device */}
       <div className="no-print flex flex-wrap items-center gap-2">
         <button type="button" className={btn} onClick={() => window.print()}>
-          Print
+          {uiCopy.buttons.print}
         </button>
         <button type="button" className={btn} onClick={copyList} aria-live="polite">
-          {copied ? "Copied ✓" : "Copy"}
+          {copied ? uiCopy.buttons.copied : uiCopy.buttons.copy}
         </button>
         <button
           type="button"
           className={btn}
           onClick={() => download(`${list.slug}.csv`, "text/csv", listToCsv(list))}
         >
-          Export CSV
+          {uiCopy.buttons.exportCsv}
         </button>
         <button
           type="button"
@@ -75,7 +76,7 @@ export function ListInteractive({ list }: { list: PortableList }) {
             download(`${list.slug}.json`, "application/json", listToJson(list))
           }
         >
-          Export JSON
+          {uiCopy.buttons.exportJson}
         </button>
         <span className="ml-1 text-xs font-semibold text-ink-soft">
           {doneCount}/{list.items.length} checked

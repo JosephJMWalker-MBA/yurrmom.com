@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque, Inter } from "next/font/google";
 import Link from "next/link";
+import { copy } from "@/i18n";
 import "./globals.css";
 
 const bricolage = Bricolage_Grotesque({
@@ -23,11 +24,11 @@ export const metadata: Metadata = {
 };
 
 const navLinks = [
-  { href: "/find-help", label: "Find Help" },
-  { href: "/creators", label: "Creators" },
-  { href: "/roast", label: "Roast" },
-  { href: "/shop", label: "Shop" },
-  { href: "/studio", label: "Studio" },
+  { href: "/find-help", label: copy.nav.findHelp },
+  { href: "/creators", label: copy.nav.creators },
+  { href: "/roast", label: copy.nav.roast },
+  { href: "/shop", label: copy.nav.shop },
+  { href: "/studio", label: copy.nav.studio },
 ];
 
 export default function RootLayout({
@@ -40,12 +41,12 @@ export default function RootLayout({
           href="#main"
           className="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-50 focus:rounded focus:bg-ink focus:px-3 focus:py-2 focus:text-cream"
         >
-          Skip to content
+          {copy.nav.skipToContent}
         </a>
 
         <header className="no-print sticky top-0 z-40 border-b-2 border-ink bg-cream/95 backdrop-blur">
           <nav
-            aria-label="Main"
+            aria-label={copy.nav.mainNavLabel}
             className="mx-auto flex max-w-5xl items-center justify-between gap-2 px-4 py-3"
           >
             <Link
@@ -78,47 +79,42 @@ export default function RootLayout({
               <span className="text-mustard">.com</span>
             </p>
             <p className="mt-2 max-w-xl text-sm text-cream/80">
-              We preserve and distribute practical household knowledge, so
-              families can start from proven experience instead of from zero.
-              Humor gets you in the door. The systems are why you stay.
+              {copy.footer.mission}
             </p>
 
             <div className="mt-6 grid gap-6 text-sm sm:grid-cols-3">
               <div>
-                <p className="font-semibold text-mustard">The site</p>
+                <p className="font-semibold text-mustard">{copy.footer.siteHeading}</p>
                 <ul className="mt-2 space-y-1 text-cream/80">
-                  <li><Link className="hover:text-cream" href="/find-help">Find Help</Link></li>
-                  <li><Link className="hover:text-cream" href="/creators">Creators</Link></li>
-                  <li><Link className="hover:text-cream" href="/roast">The Roast</Link></li>
-                  <li><Link className="hover:text-cream" href="/shop">Shop</Link></li>
-                  <li><Link className="hover:text-cream" href="/about">About &amp; mission</Link></li>
+                  <li><Link className="hover:text-cream" href="/find-help">{copy.nav.findHelp}</Link></li>
+                  <li><Link className="hover:text-cream" href="/creators">{copy.nav.creators}</Link></li>
+                  <li><Link className="hover:text-cream" href="/roast">{copy.footer.theRoast}</Link></li>
+                  <li><Link className="hover:text-cream" href="/shop">{copy.nav.shop}</Link></li>
+                  <li><Link className="hover:text-cream" href="/about">{copy.footer.aboutMission}</Link></li>
                 </ul>
               </div>
               <div>
-                <p className="font-semibold text-mustard">The promises</p>
+                <p className="font-semibold text-mustard">{copy.footer.promisesHeading}</p>
                 <ul className="mt-2 space-y-1 text-cream/80">
-                  <li>Creators keep 100% of their affiliate earnings.</li>
-                  <li>Lists stay portable — no retailer owns them.</li>
-                  <li>Roast subjects are fictional. Always.</li>
-                  <li>yurrmom.com earns from its own merch, not from creators.</li>
+                  <li>{copy.footer.promiseEarnings}</li>
+                  <li>{copy.footer.promisePortable}</li>
+                  <li>{copy.footer.promiseFictional}</li>
+                  <li>{copy.footer.promiseMerch}</li>
                 </ul>
               </div>
               <div>
-                <p className="font-semibold text-mustard">Honesty notes</p>
+                <p className="font-semibold text-mustard">{copy.footer.honestyHeading}</p>
                 <ul className="mt-2 space-y-1 text-cream/80">
-                  <li>This is a seeded preview build.</li>
-                  <li>Retailer links open at the retailer — no cart sync yet.</li>
-                  <li>Shop checkout opens when fulfillment is truly connected.</li>
-                  <li>Nothing here pretends to be integrated when it isn&apos;t.</li>
+                  <li>{copy.footer.honestyPreview}</li>
+                  <li>{copy.footer.honestyLinks}</li>
+                  <li>{copy.footer.honestyCheckout}</li>
+                  <li>{copy.footer.honestyNoPretending}</li>
                 </ul>
               </div>
             </div>
 
             <p className="mt-8 border-t border-cream/20 pt-4 text-xs text-cream/60">
-              Affiliate disclosure: creator pages may contain the creator&apos;s own
-              affiliate links, marked where they appear. Purchases through them may
-              earn that creator a commission. yurrmom.com takes 0% of creator affiliate
-              earnings.
+              {copy.footer.affiliateDisclosure}
             </p>
           </div>
         </footer>

@@ -35,6 +35,7 @@ export const creators: Creator[] = [
     ],
     systemSlugs: ["celiac-safe-pantry-reset"],
     accent: "sage",
+    locale: { sourceLocale: "en", region: "US", measurementSystem: "us-customary" },
   },
   {
     handle: "dee-does-laundry",
@@ -64,6 +65,7 @@ export const creators: Creator[] = [
     ],
     systemSlugs: ["family-of-six-laundry-line"],
     accent: "tomato",
+    locale: { sourceLocale: "en", region: "US", measurementSystem: "us-customary" },
   },
   {
     handle: "sam-after-midnight",
@@ -91,6 +93,7 @@ export const creators: Creator[] = [
     externalChannels: [{ label: "YouTube", url: "https://www.youtube.com/" }],
     systemSlugs: ["two-am-field-kit"],
     accent: "mustard",
+    locale: { sourceLocale: "en", region: "US", measurementSystem: "us-customary" },
   },
 ];
 

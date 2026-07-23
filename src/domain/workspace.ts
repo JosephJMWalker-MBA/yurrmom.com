@@ -24,6 +24,8 @@ export interface Capture {
   kind: "idea" | "list-item" | "lesson" | "warning";
   text: string;
   createdAt: string; // ISO
+  /** Language the capture was written in — inherits creator locale if absent. */
+  locale?: import("./i18n").LocaleMeta;
 }
 
 export interface WorkspaceSystem {

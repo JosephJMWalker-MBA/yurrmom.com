@@ -53,6 +53,10 @@ export const systems: HouseholdSystem[] = [
           "Green/red zones already set up",
           "Label kit (tape + sharpies) stocked",
         ],
+        culturalNote:
+          "Built around US grocery labeling. The zone-and-color idea transfers anywhere; the label-reading step is country-specific.",
+        translationCaution:
+          "US certification marks (like GFCO) and FDA 'gluten-free' rules don't exist in every country. A translated version of this routine must re-teach the label check against the reader's local labeling law — word-for-word translation would give false confidence.",
         cred: {
           skillTaught: "Reading allergen labels and certification marks",
           ageApplicability: "About 9+ alongside an adult",
@@ -104,6 +108,9 @@ export const systems: HouseholdSystem[] = [
       creatorNote:
         "Everything here comes from running this kitchen daily since the 2024 diagnosis — no sponsorships, no test kitchens.",
       lastReviewed: "2026-06-14",
+      originalAuthorHandle: "maya-runs-the-kitchen",
+      originalLocale: "en",
+      reviewStatus: "creator-reviewed",
     },
     facets: {
       householdCircumstances: [
@@ -119,6 +126,13 @@ export const systems: HouseholdSystem[] = [
       outcomesObserved: ["zero cross-contact incidents since 2024"],
       evidenceType: "personal-experience",
       applicability: "Shared family kitchens with school-age kids",
+    },
+    locale: {
+      sourceLocale: "en",
+      region: "US",
+      measurementSystem: "us-customary",
+      culturalContext:
+        "Assumes US grocery labeling law and US store brands. The zoning method is universal; the label specifics are not.",
     },
     relatedSystemSlugs: ["family-of-six-laundry-line", "two-am-field-kit"],
   },
@@ -167,6 +181,7 @@ export const systems: HouseholdSystem[] = [
     recipes: [],
     disclosure:
       "Retailer links in this system's kit list are Dee's own links; some are affiliate. If you buy through them, Dee may earn a commission. yurrmom.com takes 0%.",
+    locale: { sourceLocale: "en", region: "US", measurementSystem: "us-customary" },
     relatedSystemSlugs: ["celiac-safe-pantry-reset", "two-am-field-kit"],
   },
   {
@@ -214,6 +229,7 @@ export const systems: HouseholdSystem[] = [
     recipes: [],
     disclosure:
       "Some links in this kit are Sam's affiliate links. Purchases through them may earn Sam a commission. yurrmom.com takes 0%.",
+    locale: { sourceLocale: "en", region: "US", measurementSystem: "us-customary" },
     relatedSystemSlugs: ["celiac-safe-pantry-reset", "family-of-six-laundry-line"],
   },
 ];

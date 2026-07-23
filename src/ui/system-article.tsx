@@ -6,6 +6,12 @@ import type {
   PortableList,
   SourceType,
 } from "@/domain/types";
+import { DEFAULT_LOCALE, localeLabel, localeNames } from "@/domain/i18n";
+import {
+  effectiveTranslationStatus,
+  translationStatusLabels,
+  type TranslationRecord,
+} from "@/domain/translation";
 import { CreatorAvatar } from "@/ui/avatar";
 import { Kicker } from "@/ui/badges";
 
@@ -24,6 +30,26 @@ const sourceTypeLabels: Record<SourceType, { label: string; caveat: string }> = 
     label: "Sourced reference",
     caveat: "Relays external sources — weigh them yourself.",
   },
+  "community-adaptation": {
+    label: "Community adaptation",
+    caveat:
+      "Adapted from another household's method — the original is credited in the notes.",
+  },
+  "translated-derivative": {
+    label: "Translated derivative",
+    caveat:
+      "A translation of someone's original. These are not the creator's own words; the source version remains authoritative.",
+  },
+  "platform-synthesis": {
+    label: "Platform synthesis",
+    caveat:
+      "Assembled by yurrmom.com from multiple sources — not one creator's lived method.",
+  },
+  "ai-assisted-draft": {
+    label: "AI-assisted draft",
+    caveat:
+      "Drafted with AI assistance and not yet owned by a human author. Treat as unverified.",
+  },
 };
 
 /**
@@ -38,6 +64,7 @@ export function SystemArticle({
   lists,
   mode,
   actions,
+  translations,
 }: {
   system: HouseholdSystem;
   creator: Creator;
@@ -47,8 +74,11 @@ export function SystemArticle({
   mode: "public" | "preview";
   /** Extra action buttons (e.g. device-save) rendered next to list CTAs. */
   actions?: React.ReactNode;
+  /** Linked translation records — rendered with provenance, never as source. */
+  translations?: TranslationRecord[];
 }) {
   const ctx = context ?? creator.context;
+  const locale = system.locale ?? DEFAULT_LOCALE;
   const listHref = (slug: string) =>
     mode === "public" ? `/lists/${slug}` : `#preview-list-${slug}`;
 
@@ -193,6 +223,11 @@ export function SystemArticle({
                       : ""}
                 </p>
               )}
+              {routine.culturalNote && (
+                <p className="mt-2 text-xs text-ink-soft">
+                  🌍 {routine.culturalNote}
+                </p>
+              )}
             </div>
           ))}
         </section>
@@ -276,6 +311,33 @@ export function SystemArticle({
             <p className="mt-2 text-xs font-semibold text-ink-soft">
               Last reviewed for accuracy: {system.provenance.lastReviewed}
             </p>
+          )}
+
+          {/* Language & translation provenance — unobtrusive, always honest */}
+          <p className="mt-3 border-t border-ink/10 pt-3 text-xs font-semibold text-ink-soft">
+            ✍️ Written in {localeLabel(locale)} — this page shows the original.
+            {locale.culturalContext && (
+              <span className="font-normal"> {locale.culturalContext}</span>
+            )}
+          </p>
+          {translations && translations.length > 0 && (
+            <ul className="mt-2 space-y-1.5">
+              {translations.map((t) => {
+                const eff = effectiveTranslationStatus(t, system.version);
+                return (
+                  <li key={t.id} className="text-xs text-ink-soft">
+                    🌐 A {localeNames[t.targetLocale] ?? t.targetLocale}{" "}
+                    translation exists:{" "}
+                    <span className="font-semibold">
+                      {translationStatusLabels[eff]}
+                    </span>
+                    {eff !== "stale" && t.status === "machine-draft" && (
+                      <> — the creator has not approved it, and this original remains the authoritative version.</>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
           )}
         </section>
       )}

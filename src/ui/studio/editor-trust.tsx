@@ -13,7 +13,26 @@ const sourceTypeNotes: Record<SourceType, string> = {
     "Only choose this if you hold relevant credentials you can name below. yurrmom.com labels what you tell it — it does not verify credentials, and the public page will say so.",
   "sourced-reference":
     "You're relaying information from an external source. Name the source below so readers can weigh it themselves.",
+  "community-adaptation":
+    "You adapted another household's method. Credit the original in your note below — adaptation is honorable, uncredited copying isn't.",
+  // Derivative types below are assigned by the platform (translations, AI,
+  // synthesis) and are deliberately NOT offered in the creator select — a
+  // creator's own declaration can't be a derivative of itself.
+  "translated-derivative":
+    "Platform-assigned: a linked translation of an original. Never selectable by a creator.",
+  "platform-synthesis":
+    "Platform-assigned: assembled from multiple sources. Never selectable by a creator.",
+  "ai-assisted-draft":
+    "Platform-assigned: drafted with AI assistance. Never selectable by a creator.",
 };
+
+/** Only these are creator-declarable in the editor. */
+const declarableSourceTypes: { value: SourceType; label: string }[] = [
+  { value: "personal-experience", label: "Personal experience — I live this" },
+  { value: "professional-guidance", label: "Professional guidance — I work in this field" },
+  { value: "sourced-reference", label: "Sourced reference — relaying others' work" },
+  { value: "community-adaptation", label: "Community adaptation — I adapted someone's method" },
+];
 
 /**
  * Trust & provenance. What kind of knowledge this is, when it was last
@@ -45,11 +64,7 @@ export function TrustSection({ ws, update }: { ws: WorkspaceSystem; update: Upda
               };
             })
           }
-          options={[
-            { value: "personal-experience", label: "Personal experience — I live this" },
-            { value: "professional-guidance", label: "Professional guidance — I work in this field" },
-            { value: "sourced-reference", label: "Sourced reference — relaying others' work" },
-          ]}
+          options={declarableSourceTypes}
         />
       </Field>
       <p className="rounded-lg bg-mustard-soft/60 p-3 text-xs leading-relaxed text-ink">

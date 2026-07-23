@@ -15,6 +15,8 @@
  *
  * No framework imports belong in this module.
  */
+import type { LocaleMeta } from "./i18n";
+import type { TranslatableRef } from "./translation";
 
 // ---------------------------------------------------------------- adapters
 
@@ -65,6 +67,8 @@ export interface Creator {
   /** Slug refs into systems — creator owns these. */
   systemSlugs: string[];
   accent: "tomato" | "sage" | "mustard";
+  /** Language this profile was written in (Phase 3). */
+  locale?: LocaleMeta;
 }
 
 // ---------------------------------------------------------------- knowledge
@@ -86,6 +90,8 @@ export interface StorySection {
   body: string;
   /** Optional structured kind; legacy sections may carry heading only. */
   kind?: StoryKind;
+  /** Language override — inherits the system's locale when absent. */
+  locale?: LocaleMeta;
 }
 
 export interface RoutineStep {
@@ -118,6 +124,15 @@ export interface Routine {
   note?: string;
   /** Optional Cred at Home readiness — see CredReadiness. */
   cred?: CredReadiness;
+  /** Language override — inherits the system's locale when absent. */
+  locale?: LocaleMeta;
+  /** How this practice varies across cultures or households (Phase 3). */
+  culturalNote?: string;
+  /**
+   * Why this practice may not transfer directly across languages/regions —
+   * e.g. certification marks or labeling law that differ by country.
+   */
+  translationCaution?: string;
 }
 
 export interface Recipe {
@@ -128,6 +143,8 @@ export interface Recipe {
   steps: string[];
   prerequisites?: string[];
   note?: string;
+  /** Language override — inherits the system's locale when absent. */
+  locale?: LocaleMeta;
 }
 
 // ----------------------------------------------------- provenance & meaning
@@ -136,11 +153,28 @@ export interface Recipe {
  * What kind of knowledge this is. Rendered plainly wherever the system is
  * shown, so yurrmom.com never implies medical, legal, nutritional, educational,
  * or developmental authority that has not been established.
+ *
+ * The first four are creator-declarable in the editor. The last three are
+ * DERIVATIVE types assigned by the platform when content is translated,
+ * synthesized, or AI-assisted — a creator cannot claim them, and content
+ * carrying them is never presented as the creator's original words.
  */
 export type SourceType =
-  | "personal-experience"
-  | "professional-guidance"
-  | "sourced-reference";
+  | "personal-experience" // lived family experience
+  | "professional-guidance" // professional experience
+  | "sourced-reference" // authoritative reference
+  | "community-adaptation" // adapted from another household's method
+  | "translated-derivative" // platform-linked translation of an original
+  | "platform-synthesis" // assembled by the platform from multiple sources
+  | "ai-assisted-draft"; // drafted with AI assistance, pending human ownership
+
+export interface AdaptationEvent {
+  date: string; // ISO
+  byHandle?: string;
+  note: string;
+}
+
+export type ReviewStatus = "unreviewed" | "creator-reviewed" | "needs-review";
 
 export interface Provenance {
   sourceType: SourceType;
@@ -150,26 +184,75 @@ export interface Provenance {
   creatorNote?: string;
   /** ISO date the creator last reviewed the content for accuracy. */
   lastReviewed?: string;
+  // ---- Phase 3: derivation history (all optional; absent = original) ----
+  /** Defaults to the owning creator when absent. */
+  originalAuthorHandle?: string;
+  /** Language the original was authored in, e.g. "en". */
+  originalLocale?: string;
+  /** Version of the original this content derives from. */
+  originalVersion?: number;
+  /** The source object a derivative was made from. */
+  derivedFrom?: TranslatableRef;
+  /** How the content has been adapted over time, oldest first. */
+  adaptationHistory?: AdaptationEvent[];
+  reviewStatus?: ReviewStatus;
 }
 
 /**
- * Semantic facets (Phase 2 extension point for household intelligence).
- * Captured through the human editor — never exposed as ontology management.
- * All optional; a grounded assistant can later read these without guessing.
+ * Semantic facets (Phase 2 extension point, refined in Phase 3 for household
+ * intelligence). Captured through the human editor — never exposed as
+ * ontology management. All optional; a grounded assistant can later read
+ * these without guessing.
  */
 export interface SemanticFacets {
   householdCircumstances?: string[];
   developmentalStage?: string;
-  /** Task / household domain, e.g. "kitchen & food safety". */
+  /** Household domain, e.g. "kitchen & food safety". */
   domain?: string;
   purpose?: string;
   constraints?: string[];
+  /** Concrete tasks/chores this system touches, e.g. "weekly label check". */
+  tasks?: string[];
   skillsTaught?: string[];
   requiredKnowledge?: string[];
   outcomesObserved?: string[];
   evidenceType?: SourceType;
   applicability?: string;
   limitations?: string;
+  /** How often the system runs, in plain words. */
+  frequency?: string;
+  /** Who this is for, mirrored from the system's audience when set. */
+  audience?: string;
+  /** Culture/region assumptions, e.g. "assumes US grocery labeling law". */
+  culturalContext?: string;
+}
+
+/**
+ * Flattened, typed facet view (Phase 3) — the uniform shape future search
+ * and assistant retrieval consume. `facetsOf` in the domain layer flattens
+ * a system's structured fields into these; the editor never shows this form.
+ */
+export type FacetKey =
+  | "household-domain"
+  | "household-circumstance"
+  | "developmental-stage"
+  | "audience"
+  | "purpose"
+  | "constraint"
+  | "task"
+  | "skill-taught"
+  | "prerequisite-knowledge"
+  | "supervision-level"
+  | "frequency"
+  | "evidence-type"
+  | "observed-outcome"
+  | "applicability"
+  | "limitations"
+  | "cultural-context";
+
+export interface Facet {
+  key: FacetKey;
+  value: string;
 }
 
 export interface HouseholdSystem {
@@ -196,6 +279,8 @@ export interface HouseholdSystem {
   disclosure?: string;
   provenance?: Provenance;
   facets?: SemanticFacets;
+  /** Language this system was authored in (Phase 3). */
+  locale?: LocaleMeta;
   relatedSystemSlugs: string[];
 }
 
@@ -244,6 +329,8 @@ export interface PortableList {
   title: string;
   intro: string;
   items: ListItem[];
+  /** Language override — inherits the system's locale when absent. */
+  locale?: LocaleMeta;
 }
 
 // ------------------------------------------------------------------- roast
