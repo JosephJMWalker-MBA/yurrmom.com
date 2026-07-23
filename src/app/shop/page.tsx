@@ -6,9 +6,9 @@ import { AdapterBadge, Kicker, MerchBadge } from "@/ui/badges";
 import { MerchArt } from "@/ui/merch-art";
 
 export const metadata: Metadata = {
-  title: "Shop — Original YurrMom Merch",
+  title: "Shop — Original yurrmom.com Merch",
   description:
-    "Original YurrMom merchandise. It funds the platform so creators keep 100% of their affiliate earnings.",
+    "Original yurrmom.com merchandise. It funds the platform so creators keep 100% of their affiliate earnings.",
 };
 
 export default function ShopPage() {
@@ -22,7 +22,7 @@ export default function ShopPage() {
         Merch with a business model
       </h1>
       <p className="mt-3 max-w-2xl text-lg text-ink-soft">
-        Every item here is an original YurrMom design. This is how the platform
+        Every item here is an original yurrmom.com design. This is how the platform
         pays for itself — <span className="font-bold text-ink">so it never has to
         take a cut of a creator&apos;s affiliate earnings.</span> Buying a mug here
         literally funds the no-commission promise.

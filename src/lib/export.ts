@@ -15,7 +15,7 @@ export function listToPlainText(list: PortableList): string {
     }
     if (item.notes) lines.push(`    Note: ${item.notes}`);
   }
-  lines.push("", "From YurrMom — a portable list. It works at any store.");
+  lines.push("", "From yurrmom.com — a portable list. It works at any store.");
   return lines.join("\n");
 }
 

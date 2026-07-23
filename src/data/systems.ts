@@ -13,23 +13,33 @@ export const systems: HouseholdSystem[] = [
       "Rebuild one shared kitchen so the gluten-free person in it is safe by default — in a weekend, without a second fridge.",
     problem:
       "After a celiac diagnosis, most families try to be careful everywhere, all the time. Vigilance doesn't scale — systems do. This reset moves safety out of everyone's memory and into the kitchen's layout.",
+    audience:
+      "Families adapting one shared kitchen to a celiac diagnosis — especially with school-age kids who need to feed themselves safely.",
+    observedResults:
+      "Zero cross-contact incidents since 2024. A ten-year-old who safely makes her own toast. Grocery spend back to pre-diagnosis levels within two months.",
+    limitations:
+      "This is a celiac cross-contact system, not an allergy or FODMAP protocol. It assumes one family-controlled kitchen and school-age kids — toddlers and shared rentals need tighter rules. We're a family, not doctors: bring medical questions to your GI team.",
     situationTags: ["gluten-free-household", "dietary-constraint", "shared-kitchen"],
     lastUpdated: "2026-06-14",
     version: 4,
     story: [
       {
+        kind: "what-happened",
         heading: "What happened",
         body: "My daughter was diagnosed with celiac disease at seven. The GI doc handed us a pamphlet and said 'no gluten, and watch cross-contact.' That second clause is the whole war. Flour dust floats. Toasters lie. A shared butter tub is a crime scene.",
       },
       {
-        heading: "What failed first",
+        kind: "what-failed",
+        heading: "What failed",
         body: "Version one was 'we'll all just be careful.' We were careful for eleven days, and then someone made regular pasta and used the colander. Version two was 'separate everything' — two of every utensil, chaos, and a grocery bill that made me sit down. Neither survived contact with a real Tuesday.",
       },
       {
-        heading: "What actually works",
+        kind: "what-works-now",
+        heading: "What works now",
         body: "Zones, colors, and squeeze bottles. Green-lid bins are safe, red tape means gluten, the cheap second toaster is sacred, and any condiment that can be a squeeze bottle becomes one — cross-contact dies in the squeeze. The kitchen enforces the rules so the humans don't have to. My ten-year-old can safely make her own toast, which was the whole point.",
       },
       {
+        kind: "what-changed",
         heading: "What changed with experience",
         body: "v2 added the Sunday label check after a granola brand quietly changed facilities. v3 demoted almond-flour everything (expensive, nobody ate it). v4 added the backpack-snack rotation because safe snack fatigue is real and it ends with a hungry kid trading food at school — the exact thing you're trying to prevent.",
       },
@@ -39,6 +49,21 @@ export const systems: HouseholdSystem[] = [
       {
         title: "The Sunday Label Check",
         frequency: "Weekly · 10 minutes",
+        prerequisites: [
+          "Green/red zones already set up",
+          "Label kit (tape + sharpies) stocked",
+        ],
+        cred: {
+          skillTaught: "Reading allergen labels and certification marks",
+          ageApplicability: "About 9+ alongside an adult",
+          supervisionLevel: "nearby",
+          demonstrationRequired: true,
+          practiceFrequency: "Weekly — it IS the Sunday routine",
+          competenceCriteria:
+            "Can explain why 'unsure counts as fail' and correctly sort three never-seen products",
+          evidenceOfCompletion:
+            "Runs the whole check with you watching, three Sundays in a row",
+        },
         steps: [
           { when: "Sunday, while coffee brews", what: "Pull anything new that entered the pantry this week into one spot on the counter." },
           { when: "Per item", what: "Check for certified GF mark or read the allergen statement. Facilities change without warning — last week's safe brand is a rumor, not a fact." },
@@ -72,7 +97,29 @@ export const systems: HouseholdSystem[] = [
       },
     ],
     disclosure:
-      "Some retailer links on this system are Maya's affiliate links. If you buy through them, Maya may earn a commission. YurrMom takes 0% of it — creator earnings are the creator's.",
+      "Some retailer links on this system are Maya's affiliate links. If you buy through them, Maya may earn a commission. yurrmom.com takes 0% of it — creator earnings are the creator's.",
+    provenance: {
+      sourceType: "personal-experience",
+      livedExperience: true,
+      creatorNote:
+        "Everything here comes from running this kitchen daily since the 2024 diagnosis — no sponsorships, no test kitchens.",
+      lastReviewed: "2026-06-14",
+    },
+    facets: {
+      householdCircumstances: [
+        "celiac child",
+        "one shared kitchen",
+        "two working parents",
+      ],
+      domain: "Kitchen & food safety",
+      purpose: "Make a shared kitchen safe by default, not by vigilance",
+      constraints: ["strict cross-contact prevention", "mid-budget"],
+      skillsTaught: ["label reading", "zone discipline"],
+      requiredKnowledge: ["certified-GF labeling basics"],
+      outcomesObserved: ["zero cross-contact incidents since 2024"],
+      evidenceType: "personal-experience",
+      applicability: "Shared family kitchens with school-age kids",
+    },
     relatedSystemSlugs: ["family-of-six-laundry-line", "two-am-field-kit"],
   },
   {
@@ -119,7 +166,7 @@ export const systems: HouseholdSystem[] = [
     ],
     recipes: [],
     disclosure:
-      "Retailer links in this system's kit list are Dee's own links; some are affiliate. If you buy through them, Dee may earn a commission. YurrMom takes 0%.",
+      "Retailer links in this system's kit list are Dee's own links; some are affiliate. If you buy through them, Dee may earn a commission. yurrmom.com takes 0%.",
     relatedSystemSlugs: ["celiac-safe-pantry-reset", "two-am-field-kit"],
   },
   {
@@ -166,7 +213,7 @@ export const systems: HouseholdSystem[] = [
     ],
     recipes: [],
     disclosure:
-      "Some links in this kit are Sam's affiliate links. Purchases through them may earn Sam a commission. YurrMom takes 0%.",
+      "Some links in this kit are Sam's affiliate links. Purchases through them may earn Sam a commission. yurrmom.com takes 0%.",
     relatedSystemSlugs: ["celiac-safe-pantry-reset", "family-of-six-laundry-line"],
   },
 ];

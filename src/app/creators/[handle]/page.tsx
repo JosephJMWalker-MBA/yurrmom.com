@@ -118,7 +118,7 @@ export default async function CreatorProfilePage({
           Also publishing on
         </h2>
         <p className="mt-1 text-sm text-ink-soft">
-          Creators keep their own channels and audiences — YurrMom is an
+          Creators keep their own channels and audiences — yurrmom.com is an
           additional home for the structured version, never a replacement.
         </p>
         <ul className="mt-3 flex flex-wrap gap-2">
@@ -141,7 +141,7 @@ export default async function CreatorProfilePage({
         <span className="font-extrabold">The deal:</span> {creator.displayName.split(" ")[0]}&apos;s
         systems may include their own affiliate links, marked wherever they appear.
         Purchases through them may earn {creator.displayName.split(" ")[0]} a commission —{" "}
-        <span className="font-extrabold">YurrMom takes 0%.</span>{" "}
+        <span className="font-extrabold">yurrmom.com takes 0%.</span>{" "}
         <Link href="/about" className="font-bold underline decoration-sage decoration-2 underline-offset-2">
           Why that&apos;s the whole point →
         </Link>

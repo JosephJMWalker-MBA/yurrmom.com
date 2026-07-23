@@ -4,7 +4,7 @@ import { stateLabels } from "@/adapters/states";
 /**
  * The honesty system, rendered. These badges are how the four provenance
  * boundaries (docs/07) stay visible at all times:
- * fiction labels, creator-affiliate marks, YurrMom-merch marks, adapter states.
+ * fiction labels, creator-affiliate marks, yurrmom.com-merch marks, adapter states.
  */
 
 export function FictionBadge({ className = "" }: { className?: string }) {
@@ -36,7 +36,7 @@ export function CreatorLinkBadge() {
 export function MerchBadge() {
   return (
     <span className="inline-flex items-center rounded-full border border-ink bg-cream px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide text-ink">
-      YurrMom original
+      yurrmom.com original
     </span>
   );
 }
