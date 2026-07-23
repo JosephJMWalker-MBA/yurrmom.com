@@ -11,6 +11,8 @@ next-env.d.ts
 *.pem
 npm-debug.log*
 .env*
+# ...but the placeholder template (no secrets) IS tracked:
+!.env.example
 
 # local tooling
 .claude/
