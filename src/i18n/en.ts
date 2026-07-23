@@ -132,6 +132,30 @@ export const en = {
     viewStudio: "Open in Studio ↗",
   },
 
+  plan: {
+    heading: "Answer Plan Inspector",
+    intro:
+      "A deterministic answer contract derived from the packet above — what a future renderer or model may say, how it must be qualified, and when it must abstain. Not a conversational answer.",
+    build: "Build answer plan",
+    depthLabel: "Communication depth",
+    dispositionHeading: "Disposition",
+    authoritativeHeading: "Authoritative guidance (reviewed, in scope)",
+    experienceHeading: "Household experience (labeled — not instruction)",
+    qualificationsHeading: "Mandatory qualifications",
+    missingHeading: "Missing evidence",
+    conflictsHeading: "Unresolved conflicts",
+    escalationHeading: "Escalation directive",
+    prohibitedHeading: "Prohibited assertions",
+    citationsHeading: "Citation map",
+    ledgerHeading: "Support ledger",
+    validationHeading: "Plan validation",
+    previewHeading: "Deterministic preview (no model)",
+    validPass: "Plan is valid — every point is traceable and supported.",
+    validFail: "Plan is INVALID — see errors.",
+    note: "This plan is what a future model would receive as a hard constraint. It never receives a raw evidence packet.",
+    fingerprintLabel: "Fingerprints",
+  },
+
   buttons: {
     edit: "Edit",
     preview: "Preview",

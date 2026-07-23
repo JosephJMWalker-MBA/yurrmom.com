@@ -12,6 +12,14 @@ import {
   type KnowledgeUnit,
   type RepresentationPolicy,
 } from "@/domain/knowledge";
+import {
+  planAnswer,
+  answerRenderer,
+  type AnswerPlan,
+  type AnswerPoint,
+  type AnswerRequest,
+  type CommunicationDepth,
+} from "@/domain/answer";
 import { localeLabel, localeNames } from "@/domain/i18n";
 import { knowledgeCorpus, knowledgeTranslations } from "@/data/knowledge-corpus";
 import { evaluationCases } from "@/data/evaluation-cases";
@@ -89,6 +97,7 @@ export function EvidenceExplorer() {
   const [circumstance, setCircumstance] = useState("");
   const [devStage, setDevStage] = useState("");
   const [systemScope, setSystemScope] = useState<string | undefined>(undefined);
+  const [depth, setDepth] = useState<CommunicationDepth>("standard");
   const [packet, setPacket] = useState<EvidencePacket | null>(null);
   const [ran, setRan] = useState(false);
 
@@ -240,6 +249,28 @@ export function EvidenceExplorer() {
 
       {/* Evidence packet */}
       {ran && packet && <PacketView packet={packet} />}
+
+      {/* Answer Plan Inspector — derived from the packet above */}
+      {ran && packet && (
+        <PlanInspector
+          request={{
+            question: text,
+            requestedLocale: locale,
+            representationPolicy: mode,
+            guidanceRisk: risk,
+            householdDomain: domain || undefined,
+            constraints: constraint ? [constraint] : undefined,
+            taskOrSkill: skill || undefined,
+            householdCircumstances: circumstance ? [circumstance] : undefined,
+            developmentalStage: devStage || undefined,
+            systemScope,
+            depth,
+          }}
+          packet={packet}
+          depth={depth}
+          onDepth={setDepth}
+        />
+      )}
     </div>
   );
 }
@@ -443,5 +474,206 @@ function HitCard({ hit }: { hit: EvidenceHit }) {
         </Link>
       </div>
     </li>
+  );
+}
+
+// ─────────────────────────────────── Answer Plan Inspector (Phase 6) ─────────
+
+const P = copy.plan;
+
+const dispositionStyle: Record<AnswerPlan["disposition"], string> = {
+  "household-exploration": "border-sage bg-sage-soft text-sage-deep",
+  "qualified-household-exploration": "border-mustard bg-mustard-soft text-ink",
+  "supported-guidance": "border-sage bg-sage-soft text-sage-deep",
+  "conflicted-guidance": "border-tomato/60 bg-cream text-tomato-deep",
+  "abstain-insufficient-evidence": "border-ink/30 bg-cream text-ink-soft",
+  "abstain-authoritative-support-required": "border-tomato/60 bg-cream text-tomato-deep",
+  "escalate-to-qualified-professional": "border-tomato/60 bg-cream text-tomato-deep",
+};
+
+function PlanInspector({
+  request,
+  packet,
+  depth,
+  onDepth,
+}: {
+  request: AnswerRequest;
+  packet: EvidencePacket;
+  depth: CommunicationDepth;
+  onDepth: (d: CommunicationDepth) => void;
+}) {
+  const [plan, setPlan] = useState<AnswerPlan | null>(null);
+
+  function build() {
+    setPlan(planAnswer(request, packet));
+  }
+
+  return (
+    <section aria-label="Answer plan inspector" className="space-y-4 border-t-2 border-ink/15 pt-6">
+      <div>
+        <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-sage">
+          {copy.studio.name} · {P.heading}
+        </p>
+        <h2 className="mt-1 font-display text-2xl font-extrabold">{P.heading}</h2>
+        <p className="mt-1 max-w-2xl text-sm text-ink-soft">{P.intro}</p>
+      </div>
+
+      <div className="flex flex-wrap items-end gap-3">
+        <Field label={P.depthLabel} htmlFor="plan-depth">
+          <Select
+            id="plan-depth"
+            value={depth}
+            onChange={(v) => onDepth(v as CommunicationDepth)}
+            options={[
+              { value: "brief", label: "Brief" },
+              { value: "standard", label: "Standard" },
+              { value: "detailed", label: "Detailed" },
+            ]}
+          />
+        </Field>
+        <button
+          type="button"
+          onClick={build}
+          className="rounded-full border-2 border-ink bg-sage px-5 py-2 text-sm font-extrabold text-cream transition-colors hover:bg-sage-deep"
+        >
+          {P.build}
+        </button>
+      </div>
+
+      {plan && <PlanView plan={plan} />}
+    </section>
+  );
+}
+
+function PlanView({ plan }: { plan: AnswerPlan }) {
+  const preview = answerRenderer.renderPreview(plan);
+  return (
+    <div className="space-y-4">
+      <p className="text-xs italic text-ink-soft">{P.note}</p>
+
+      {/* Disposition */}
+      <div className={`rounded-2xl border-2 p-4 ${dispositionStyle[plan.disposition]}`}>
+        <p className="text-xs font-extrabold uppercase tracking-wide">{P.dispositionHeading}</p>
+        <p className="mt-1 font-display text-lg font-extrabold">{plan.disposition}</p>
+        <p className="mt-1 text-xs">Coverage: {plan.coverage} · Policy {plan.policyVersion}</p>
+      </div>
+
+      {/* Validation */}
+      <div className={`rounded-xl border p-3 text-sm ${plan.validation.valid ? "border-sage bg-sage-soft text-sage-deep" : "border-tomato/60 bg-cream text-tomato-deep"}`}>
+        <p className="font-bold">{P.validationHeading}</p>
+        <p className="mt-0.5">{plan.validation.valid ? P.validPass : P.validFail}</p>
+        {plan.validation.errors.length > 0 && (
+          <ul className="mt-1 list-disc space-y-0.5 pl-5 text-xs">
+            {plan.validation.errors.map((e, i) => <li key={i}>{e.code}: {e.message}</li>)}
+          </ul>
+        )}
+      </div>
+
+      {/* Authoritative points */}
+      {plan.authoritativePoints.length > 0 && (
+        <PlanBlock title={P.authoritativeHeading} tone="sage">
+          {plan.authoritativePoints.map((pt) => <PointRow key={pt.id} pt={pt} />)}
+        </PlanBlock>
+      )}
+
+      {/* Lived experience */}
+      {plan.livedExperienceExamples.length > 0 && (
+        <PlanBlock title={P.experienceHeading} tone="mustard">
+          {plan.livedExperienceExamples.map((pt) => <PointRow key={pt.id} pt={pt} />)}
+        </PlanBlock>
+      )}
+
+      {/* Conflicts */}
+      {plan.conflicts.length > 0 && (
+        <PlanBlock title={P.conflictsHeading} tone="tomato">
+          <ul className="list-disc space-y-1 pl-5 text-sm">{plan.conflicts.map((c, i) => <li key={i}>{c}</li>)}</ul>
+        </PlanBlock>
+      )}
+
+      {/* Missing evidence */}
+      {plan.missingEvidence.length > 0 && (
+        <PlanBlock title={P.missingHeading} tone="ink">
+          <ul className="list-disc space-y-1 pl-5 text-sm text-ink-soft">{plan.missingEvidence.map((m, i) => <li key={i}>{m}</li>)}</ul>
+        </PlanBlock>
+      )}
+
+      {/* Escalation */}
+      {plan.escalation.type !== "none" && (
+        <PlanBlock title={P.escalationHeading} tone="tomato">
+          <p className="text-sm"><span className="font-bold">{plan.escalation.type}</span> — {plan.escalation.reason}</p>
+          <p className="mt-1 text-sm italic">&ldquo;{plan.escalation.requiredWording}&rdquo;</p>
+          <p className="mt-1 text-xs text-ink-soft">Household examples allowed: {String(plan.escalation.householdExamplesAllowed)} · Prescriptive prohibited: {String(plan.escalation.prescriptiveAnswerPointsProhibited)}</p>
+        </PlanBlock>
+      )}
+
+      {/* Mandatory qualifications */}
+      {plan.limitations.length > 0 && (
+        <PlanBlock title={P.qualificationsHeading} tone="ink">
+          <ul className="list-disc space-y-1 pl-5 text-sm text-ink-soft">{plan.limitations.map((l, i) => <li key={i}>{l}</li>)}</ul>
+        </PlanBlock>
+      )}
+
+      {/* Prohibited assertions */}
+      <PlanBlock title={P.prohibitedHeading} tone="ink">
+        <ul className="list-disc space-y-1 pl-5 text-sm text-ink-soft">
+          {plan.prohibitedAssertions.map((pa) => <li key={pa.code}><span className="font-mono text-xs text-tomato-deep">{pa.code}</span> — {pa.text}</li>)}
+        </ul>
+      </PlanBlock>
+
+      {/* Citation map */}
+      <PlanBlock title={P.citationsHeading} tone="ink">
+        <ol className="space-y-2 text-sm">
+          {plan.citationMap.map((c) => (
+            <li key={c.label} className="rounded-lg border border-ink/15 bg-cream/60 p-2">
+              <span className="font-bold">[{c.label}]</span> {c.attribution} · <span className="text-ink-soft">{c.sourceType}</span>
+              <p className="mt-0.5 italic text-ink-soft">&ldquo;{c.exactExcerpt.length > 160 ? c.exactExcerpt.slice(0, 160) + "…" : c.exactExcerpt}&rdquo;</p>
+              <p className="mt-0.5 text-xs text-ink-soft">
+                {c.locale} · {c.translationStatus} · review: {c.reviewStatus}
+                {c.authoritativeEligible !== undefined ? ` · eligible: ${c.authoritativeEligible}` : ""}
+                {c.locator?.page ? ` · p.${c.locator.page}` : ""}{c.locator?.sectionHeading ? ` · ${c.locator.sectionHeading}` : ""}
+                {c.evidenceHash ? ` · hash ${c.evidenceHash}` : ""}
+              </p>
+            </li>
+          ))}
+        </ol>
+      </PlanBlock>
+
+      {/* Deterministic preview */}
+      {preview.ok && (
+        <PlanBlock title={P.previewHeading} tone="sage">
+          <pre className="overflow-x-auto whitespace-pre-wrap rounded-lg bg-cream p-3 text-xs text-ink">{preview.preview.text}</pre>
+        </PlanBlock>
+      )}
+
+      <p className="text-[11px] text-ink-soft">
+        {P.fingerprintLabel}: packet <span className="font-mono">{plan.packetFingerprint}</span> · plan <span className="font-mono">{plan.planFingerprint}</span> · citations <span className="font-mono">{plan.citationMapFingerprint}</span>
+      </p>
+    </div>
+  );
+}
+
+function PlanBlock({ title, tone, children }: { title: string; tone: "sage" | "mustard" | "tomato" | "ink"; children: React.ReactNode }) {
+  const border = { sage: "border-sage/40", mustard: "border-mustard", tomato: "border-tomato/40", ink: "border-ink/15" }[tone];
+  return (
+    <div className={`rounded-xl border ${border} bg-paper p-4`}>
+      <p className="text-xs font-bold uppercase tracking-wide text-ink-soft">{title}</p>
+      <div className="mt-2">{children}</div>
+    </div>
+  );
+}
+
+function PointRow({ pt }: { pt: AnswerPoint }) {
+  return (
+    <div className="mt-2 border-l-4 border-ink/15 pl-3 first:mt-0">
+      <p className="text-sm">
+        {pt.proposition}{" "}
+        {pt.citationIds.map((l) => <span key={l} className="font-bold text-sage-deep">[{l}]</span>)}
+      </p>
+      <p className="mt-0.5 text-[11px] text-ink-soft">
+        {pt.role} · {pt.supportClass} · {pt.prescriptiveAllowed ? "prescriptive allowed" : "non-prescriptive"} · {pt.omission}
+        {pt.applicability ? ` · ${pt.applicability}` : ""}
+      </p>
+      {pt.limitations.length > 0 && <p className="mt-0.5 text-[11px] text-ink-soft">Limitations: {pt.limitations.join(" · ")}</p>}
+    </div>
   );
 }
