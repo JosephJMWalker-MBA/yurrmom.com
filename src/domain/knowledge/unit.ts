@@ -41,7 +41,8 @@ export type UnitKind =
   | "story-section"
   | "list-item"
   | "routine"
-  | "recipe";
+  | "recipe"
+  | "curated-claim";
 
 /** Which canonical object a unit was projected from. */
 export type SourceObjectType =
@@ -49,7 +50,83 @@ export type SourceObjectType =
   | "story-section"
   | "list-item"
   | "routine"
-  | "recipe";
+  | "recipe"
+  | "curated-claim";
+
+/**
+ * Self-contained snapshot a curated-claim KnowledgeUnit carries (Phase 5).
+ *
+ * Deliberately reference-agnostic (no import from the reference layer) so the
+ * knowledge layer never depends on it — the reference projection POPULATES
+ * this, and eligibility.ts reads it. Everything an EvidencePacket needs to
+ * judge and cite authority travels inside the unit; exact evidence excerpts
+ * and locators travel WITH the claim.
+ */
+export interface ClaimEvidenceCitation {
+  spanId: string;
+  relation: "supports" | "qualifies" | "contradicts" | "background" | "defines" | "limits";
+  exactText: string;
+  sectionPath?: string;
+  locator: {
+    page?: string;
+    sectionHeading?: string;
+    paragraphIndex?: number;
+    lineRange?: string;
+    urlFragment?: string;
+    tableOrFigure?: string;
+  };
+  citationComplete: boolean;
+}
+
+export interface CuratedClaimUnitPayload {
+  claimId: string;
+  claimVersion: number;
+  statement: string;
+  claimType: string;
+  interpretationLevel: "direct-statement" | "faithful-paraphrase" | "editorial-inference";
+  claimStatus: string; // review lifecycle status
+  riskCategories: string[];
+  subjectDomains: string[];
+  intendedAudience: string;
+  developmentalApplicability?: string;
+  jurisdiction?: string;
+  applicabilityScope: "scoped" | "broad";
+  applicability: string;
+  exclusions: string[];
+  limitations: string;
+  effectiveDate?: string;
+  reviewDueDate?: string;
+  licensingNote?: string;
+  editorHandle: string;
+  evidenceCitations: ClaimEvidenceCitation[];
+  sourceVersion: {
+    id: string;
+    label: string;
+    ordinal: number;
+    status: string; // active | superseded | withdrawn
+    publisherName: string;
+    organizationType: string;
+    sourceTitle: string;
+    sourceStatus: string; // active | superseded | withdrawn
+    publicationDate?: string;
+  };
+  assessment: {
+    status: string; // unassessed | approved-for-scope | needs-review | rejected-for-authoritative-use | expired
+    recognizedDomains: string[];
+    recognizedJurisdictions: string[];
+    supportedRiskCategories: string[];
+    intendedAudience: string;
+    effectiveScope: string;
+    limitations: string;
+    reviewDueDate?: string;
+  };
+  conflicts: {
+    relation: string;
+    otherClaimId: string;
+    resolved: boolean;
+    note?: string;
+  }[];
+}
 
 /** Whether the canonical content is original or a kind of derivative. */
 export type Derivation = "original" | "adapted" | "translated" | "generated";
@@ -116,6 +193,9 @@ export interface KnowledgeUnit {
   facets: Facet[];
   applicability?: string;
   limitations?: string;
+
+  /** Present only on curated-claim units (Phase 5). */
+  claim?: CuratedClaimUnitPayload;
 
   publicHref?: string;
   studioHref: string;
