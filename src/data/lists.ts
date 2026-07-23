@@ -23,6 +23,7 @@ export const lists: PortableList[] = [
         need: "Certified GF all-purpose flour",
         quantity: "2 bags (3 lb ea.)",
         recurrence: "Monthly",
+        importance: "required",
         preferred: {
           name: "King Arthur Measure for Measure",
           why: "Swaps 1:1 into the recipes the kids already loved, so nobody has to mourn the old ziti.",
@@ -42,6 +43,7 @@ export const lists: PortableList[] = [
         need: "GF pasta the whole family will eat",
         quantity: "6 boxes",
         recurrence: "Monthly",
+        importance: "required",
         preferred: {
           name: "Jovial brown-rice penne",
           why: "Survives being reheated in a lunchbox thermos. Cheaper brands turn into regret by noon.",
@@ -61,6 +63,7 @@ export const lists: PortableList[] = [
         need: "Certified GF rolled oats",
         quantity: "1 large bag",
         recurrence: "Every 2 weeks",
+        importance: "required",
         preferred: {
           name: "Bob's Red Mill Certified GF oats",
           why: "Certification is the entire point — ordinary oats are grown and processed alongside wheat.",
@@ -76,6 +79,7 @@ export const lists: PortableList[] = [
         need: "GF soy-sauce replacement",
         quantity: "1 bottle",
         recurrence: "Monthly",
+        importance: "optional",
         preferred: {
           name: "San-J Tamari (reduced sodium)",
           why: "Tastes like soy sauce because it basically is soy sauce, minus the wheat. Stir-fry night survives the diagnosis.",
@@ -92,6 +96,7 @@ export const lists: PortableList[] = [
         need: "Corn tortillas (taco night infrastructure)",
         quantity: "2 packs",
         recurrence: "Weekly",
+        importance: "required",
         preferred: {
           name: "Mission yellow corn tortillas",
           why: "Reliable and everywhere — but production lines change, so the label check is weekly, not once-ever.",
@@ -110,6 +115,7 @@ export const lists: PortableList[] = [
         need: "A dedicated GF toaster",
         quantity: "1 (one-time)",
         recurrence: "One-time buy",
+        importance: "required",
         preferred: {
           name: "Any $15 two-slot toaster + red sharpie",
           why: "The cheapest appliance in the kitchen prevents the most common contamination in the kitchen. Label it in sharpie so guests don't 'help.'",
@@ -127,6 +133,7 @@ export const lists: PortableList[] = [
         need: "GF soup/stock base",
         quantity: "1 jar",
         recurrence: "Monthly",
+        importance: "optional",
         preferred: {
           name: "Better Than Bouillon (GF-labeled jars)",
           why: "One jar replaces a shelf of cartons, and the GF-labeled line is clearly marked.",
@@ -143,6 +150,7 @@ export const lists: PortableList[] = [
         need: "Certified GF backpack snacks",
         quantity: "2 boxes",
         recurrence: "Weekly",
+        importance: "situational",
         preferred: {
           name: "MadeGood bars + KIND minis, rotated",
           why: "Rotation matters more than brand. Safe-snack fatigue ends with a hungry kid trading food at school — the exact thing this list exists to prevent.",
@@ -160,6 +168,7 @@ export const lists: PortableList[] = [
         need: "Squeeze-bottle versions of every shared condiment",
         quantity: "As they run out",
         recurrence: "Quarterly-ish",
+        importance: "required",
         preferred: {
           name: "Squeeze mayo, butter spread, jam — any brand",
           why: "Cross-contact dies in the squeeze. No knife ever enters the jar, so the jar can't be contaminated. This one swap ended 80% of our kitchen policing.",
@@ -176,6 +185,7 @@ export const lists: PortableList[] = [
         need: "Zone-labeling supplies",
         quantity: "1 roll tape + 2 sharpies",
         recurrence: "Check monthly",
+        importance: "required",
         preferred: {
           name: "Green + red electrical tape, green/red sharpies",
           why: "The pantry's whole operating system costs six dollars. Green = safe zone, red = gluten. A seven-year-old can read it at a glance — which is the test that matters.",

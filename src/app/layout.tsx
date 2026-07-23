@@ -27,6 +27,7 @@ const navLinks = [
   { href: "/creators", label: "Creators" },
   { href: "/roast", label: "Roast" },
   { href: "/shop", label: "Shop" },
+  { href: "/studio", label: "Studio" },
 ];
 
 export default function RootLayout({
@@ -54,12 +55,12 @@ export default function RootLayout({
               YURR<span className="text-tomato">MOM</span>
               <span className="text-mustard">.</span>
             </Link>
-            <div className="flex items-center gap-3 sm:gap-5">
+            <div className="flex min-w-0 items-center gap-3 overflow-x-auto whitespace-nowrap sm:gap-5">
               {navLinks.map((l) => (
                 <Link
                   key={l.href}
                   href={l.href}
-                  className="text-[13px] font-semibold text-ink-soft transition-colors hover:text-tomato sm:text-sm"
+                  className="shrink-0 text-[13px] font-semibold text-ink-soft transition-colors hover:text-tomato sm:text-sm"
                 >
                   {l.label}
                 </Link>

@@ -114,8 +114,13 @@ export function ListInteractive({ list }: { list: PortableList }) {
                 >
                   {item.need}
                 </label>
-                <span className="mt-0.5 block text-xs font-semibold text-ink-soft">
+                <span className="mt-0.5 flex flex-wrap items-center gap-1.5 text-xs font-semibold text-ink-soft">
                   {item.quantity} · {item.recurrence}
+                  {item.importance && item.importance !== "required" && (
+                    <span className="rounded-full border border-ink/25 px-1.5 py-px text-[10px] font-bold uppercase tracking-wide">
+                      {item.importance}
+                    </span>
+                  )}
                 </span>
 
                 {item.preferred && (
