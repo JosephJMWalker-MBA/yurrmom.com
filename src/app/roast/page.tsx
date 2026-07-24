@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { currentRoast } from "@/data";
+import { moderationSeed } from "@/data/moderation-seed";
+import { projectPublicRoast } from "@/domain/moderation";
 import { FictionBadge, Kicker } from "@/ui/badges";
 import { DebIllustration } from "@/ui/deb-art";
 import { RoastBoard } from "@/ui/client/roast-board";
@@ -12,7 +13,11 @@ export const metadata: Metadata = {
 };
 
 export default function RoastPage() {
-  const roast = currentRoast;
+  // Server-rendered baseline from the seed's PUBLIC PROJECTION (active prompt +
+  // approved entries only). The board overlays this device's local moderation
+  // state on the client, so a locally-approved entry appears here after refresh.
+  const prompt = moderationSeed.prompts.find((p) => p.status === "active")!;
+  const roast = projectPublicRoast(prompt, moderationSeed.entries, moderationSeed.votes)!;
   return (
     <div className="mx-auto max-w-3xl px-4 py-10">
       <div className="flex flex-wrap items-center gap-2">
@@ -34,11 +39,11 @@ export default function RoastPage() {
 
       {/* The provenance boundary, stated where the content is */}
       <p className="mt-5 rounded-2xl border-2 border-mustard bg-mustard-soft px-4 py-3 text-sm font-semibold">
-        {roast.fiction.label}
+        {roast.fictionLabel}
       </p>
 
       <div className="mt-10">
-        <RoastBoard roast={roast} />
+        <RoastBoard slug={roast.slug} fallback={roast} />
       </div>
 
       {/* The bridge — entertainment is the doorway, not the destination */}
