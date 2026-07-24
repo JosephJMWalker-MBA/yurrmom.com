@@ -17,6 +17,7 @@ const studioLinks = [
   { href: "/studio/capture", label: copy.studio.capture },
   { href: "/studio/intelligence", label: copy.studio.intelligence },
   { href: "/studio/references", label: copy.studio.references },
+  { href: "/studio/admin", label: copy.studio.admin },
 ];
 
 /**

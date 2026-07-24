@@ -54,6 +54,7 @@ export const en = {
     intelligence: "Evidence",
     references: "References",
     content: "Content",
+    admin: "Admin",
     editingAs: "Editing as {name} · seeded identity",
     identityTitle: "Seeded demo identity — real accounts arrive in a later phase",
   },
